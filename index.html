@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+</head>
+<body>
+  <h1>Hello World!</h1>
+  We are using node <script>document.write(process.versions.node)</script>,
+  Chrome <script>document.write(process.versions.chrome)</script>,
+  and Electron <script>document.write(process.versions.electron)</script>.
+  <br/>
+  <button id = "add">新建窗口</button><br/>
+</body>
+
+<script>
+	const add = document.querySelector("#add");
+	const ipc = require('electron').ipcRenderer;
+	
+	add.onclick = ()=>
+	{
+       ipc.send('require-data','abcdefg');
+	}
+	
+	ipc.on('get-data', (event, arg) => 
+	{
+		console.log(arg)}
+	);
+	
+</script>
+
+
+</html>

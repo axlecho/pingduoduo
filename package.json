@@ -2,9 +2,9 @@
   "name": "pingduoduo",
   "version": "1.0.0",
   "description": "pinduoduo",
-  "main": "app.js",
+  "main": "main.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "pinduoduo"
   ],
   "devDependencies": {
-    "sqlite3": "^4.0.0"
+    "electron": "^2.0.2"
   },
   "dependencies": {
     "async": "^2.6.1",
