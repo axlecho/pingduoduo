@@ -1,0 +1,25 @@
+{
+  "name": "pingduoduo",
+  "version": "1.0.0",
+  "description": "pinduoduo",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XXXX"
+  },
+  "author": "axlecho",
+  "license": "GPLv3",
+  "keywords": [
+    "pinduoduo",
+    "iview"
+  ],
+  "devDependencies": {
+    "sqlite3": "^4.0.0"
+  },
+  "dependencies": {
+    "sqlite3": "^4.0.0"
+  }
+}
