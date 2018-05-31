@@ -8,18 +8,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/XXXX"
+    "url": "git+https://github.com/axlecho/pingduoduo"
   },
   "author": "axlecho",
-  "license": "GPLv3",
+  "license": "MIT",
   "keywords": [
-    "pinduoduo",
-    "iview"
+    "pinduoduo"
   ],
   "devDependencies": {
     "sqlite3": "^4.0.0"
   },
   "dependencies": {
+    "async": "^2.6.1",
     "sqlite3": "^4.0.0"
   }
 }
