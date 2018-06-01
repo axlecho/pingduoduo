@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Hello World!</title>
+  <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+  <title>生意参谋</title>
 </head>
 <body>
   <h1>Hello World!</h1>
@@ -10,10 +11,35 @@
   Chrome <script>document.write(process.versions.chrome)</script>,
   and Electron <script>document.write(process.versions.electron)</script>.
   <br/>
-  <button id = "add">新建窗口</button><br/>
+  <button id = "add">获取数据</button><br/>
+  
+	<table border="1">
+		<tr>
+			<th>姓名</th>
+			<th>email</th>
+			<th>电话</th>
+			<th>删除</th>
+		</tr>
+	</table>
 </body>
 
+
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script>if (typeof module === 'object') {window.jQuery = window.$ = module.exports;};</script>
 <script>
+	function createTable(){
+			var name = "a";
+			var email = "b";
+			var phone = "c";
+			var tr = $("<tr><td>"+name+"</td><td>"+email+"</td><td>"+phone+"</td><td><a href='#' onclick='deleteItem(this);'>删除</a></td></tr>");
+			$("table").append(tr);
+	};
+
+	function deleteItem(a){
+		$(a).parents("tr").remove();
+	}
+
+	
 	const add = document.querySelector("#add");
 	const ipc = require('electron').ipcRenderer;
 	
@@ -22,11 +48,14 @@
        ipc.send('require-data','abcdefg');
 	}
 	
-	ipc.on('get-data', (event, arg) => 
+	ipc.on('get-data', (event,data ) => 
 	{
-		console.log(arg)}
-	);
+		console.log(data);
+		createTable();
+	});
 	
+	
+
 </script>
 
 
