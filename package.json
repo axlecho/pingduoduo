@@ -15,11 +15,9 @@
   "keywords": [
     "pinduoduo"
   ],
-  "devDependencies": {
-    "electron": "^2.0.2"
-  },
+  "devDependencies": {},
   "dependencies": {
-    "async": "^2.6.1",
+    "electron-rebuild": "^1.7.3",
     "sqlite3": "^4.0.0"
   }
 }

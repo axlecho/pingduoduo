@@ -1,7 +1,8 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow} = require('electron');
 
 //主进程
 const ipc = require('electron').ipcMain;
+const DATABASE_STRING = "data.db";
 
 
 function createWindow () {   
@@ -15,8 +16,11 @@ function createWindow () {
 	
 	ipc.on('require-data',(event, arg)=> {
 		console.log(arg);
-		event.sender.send('get-data', 'adfasdfasdfadf');
+		// event.sender.send('get-data', 'adfasdfasdfadf');
+		require(event);
 	});
 }
-  
+
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database(':memory:');
 app.on('ready', createWindow)
