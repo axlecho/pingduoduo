@@ -17,10 +17,24 @@ function createWindow () {
 	ipc.on('require-data',(event, arg)=> {
 		console.log(arg);
 		// event.sender.send('get-data', 'adfasdfasdfadf');
-		require(event);
+		requireData(event);
 	});
 }
 
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(':memory:');
+
+
+
 app.on('ready', createWindow)
+
+function requireData(event) {
+	var sqlite3 = require('sqlite3').verbose();
+	var db = new sqlite3.Database(DATABASE_STRING);
+	db.serialize(function() {
+		db.all("select * from goods",function(err,res){  
+        if(!err)  
+          event.sender.send('get-data', JSON.stringify(res));
+        else  
+          console.log(err);  
+		});
+	});
+}
