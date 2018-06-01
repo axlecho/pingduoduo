@@ -15,10 +15,11 @@
   
 	<table border="1">
 		<tr>
-			<th>姓名</th>
-			<th>email</th>
-			<th>电话</th>
-			<th>删除</th>
+			<th>图片</th>
+			<th>标题</th>
+			<th>价格</th>
+			<th>详情</th>
+			<th>销量</th>
 		</tr>
 	</table>
 </body>
@@ -27,19 +28,6 @@
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script>if (typeof module === 'object') {window.jQuery = window.$ = module.exports;};</script>
 <script>
-	function createTable(){
-			var name = "a";
-			var email = "b";
-			var phone = "c";
-			var tr = $("<tr><td>"+name+"</td><td>"+email+"</td><td>"+phone+"</td><td><a href='#' onclick='deleteItem(this);'>删除</a></td></tr>");
-			$("table").append(tr);
-	};
-
-	function deleteItem(a){
-		$(a).parents("tr").remove();
-	}
-
-	
 	const add = document.querySelector("#add");
 	const ipc = require('electron').ipcRenderer;
 	
@@ -48,12 +36,40 @@
        ipc.send('require-data','abcdefg');
 	}
 	
-	ipc.on('get-data', (event,data ) => 
+	ipc.on('get-data', (event,dataStr ) => 
 	{
-		console.log(data);
-		createTable();
+		console.log(dataStr);
+		createTable(dataStr);
 	});
 	
+	function showDetail(goods_id) {
+		console.log(goods_id);
+		ipc.send('show-detail', goods_id);
+	}
+	
+	
+	function deleteItem(a){
+		$(a).parents("tr").remove();
+	}
+	function createTable(dataStr){
+		var data = jQuery.parseJSON(dataStr);
+		$.each(data,function(index,value){
+			
+			var imgStr = "<td>  <img src='" + value.hd_thumb_url +"' height='150' width='150'/> </td>";
+			var titleStr = "<td>" + value.goods_name + "</td>";
+			var priceStr = "<td>" + (value.price / 100) + "</td>";
+			var salesStr = "<td>" + value.sales + "</td>";
+			var detailStr = "<td><a href='#' onclick='showDetail(" + value.goods_id + ");'>详情</a></td>";
+			
+			var tr = $("<tr>" + imgStr + titleStr + priceStr + salesStr + detailStr + "</tr>");
+			$("table").append(tr);
+		});
+
+	};
+
+
+
+
 	
 
 </script>

@@ -19,6 +19,12 @@ function createWindow () {
 		// event.sender.send('get-data', 'adfasdfasdfadf');
 		requireData(event);
 	});
+	
+	ipc.on('show-detail',(event,arg) => {
+		console.log(arg);
+		detailWin = new BrowserWindow({width: 800, height: 1200});
+		detailWin.loadURL('http://mobile.yangkeduo.com/goods.html?goods_id=' + arg);
+	});
 }
 
 
