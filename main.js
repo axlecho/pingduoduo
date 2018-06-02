@@ -4,6 +4,8 @@ const {app, BrowserWindow} = require('electron');
 const ipc = require('electron').ipcMain;
 const DATABASE_STRING = "data.db";
 
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database(DATABASE_STRING);
 
 function createWindow () {   
 	// 创建浏览器窗口
@@ -25,16 +27,14 @@ function createWindow () {
 		detailWin = new BrowserWindow({width: 800, height: 1200});
 		detailWin.loadURL('http://mobile.yangkeduo.com/goods.html?goods_id=' + arg);
 	});
+	
+	ipc.on('get-goods-info',(event,arg) => {
+		console.log(arg);
+		requireGoodsInfo(event,arg);
+	});
 }
 
-
-
-
-app.on('ready', createWindow)
-
 function requireData(event) {
-	var sqlite3 = require('sqlite3').verbose();
-	var db = new sqlite3.Database(DATABASE_STRING);
 	db.serialize(function() {
 		db.all("select * from goods",function(err,res){  
         if(!err)  
@@ -44,3 +44,19 @@ function requireData(event) {
 		});
 	});
 }
+
+function requireGoodsInfo(event,goods_id) {
+	db.serialize(function() {
+		db.all("select * from goods_sales where goods_id=" + goods_id,function(err,res){  
+        if(!err)  
+          event.sender.send('good-info', JSON.stringify(res));
+        else  
+          console.log(err);  
+		});
+	});
+}
+
+app.on('ready', createWindow)
+
+
+	

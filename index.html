@@ -1,33 +1,110 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-  <title>生意参谋</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+	<title>生意参谋</title>
+	
+	<style>
+	table td
+	{
+		min-width:100px;
+	}
+	
+	.hint{    
+		width:1000px;    
+		height:400px;   
+		background:#ffffffff;    
+		position:absolute;    
+		z-index:9;    
+		padding:6px;    
+		line-height:17px;    
+		text-align:left;    
+		top:1520px;    
+	}   
+	</style>
 </head>
 <body>
-  <h1>Hello World!</h1>
-  We are using node <script>document.write(process.versions.node)</script>,
-  Chrome <script>document.write(process.versions.chrome)</script>,
-  and Electron <script>document.write(process.versions.electron)</script>.
-  <br/>
-  <button id = "add">获取数据</button><br/>
-  
-	<table border="1">
-		<tr>
-			<th>图片</th>
-			<th>标题</th>
-			<th>价格</th>
-			<th>详情</th>
-			<th>销量</th>
-		</tr>
-	</table>
+	<div class="container">
+		We are using node <script>document.write(process.versions.node)</script>,
+		Chrome <script>document.write(process.versions.chrome)</script>,
+		and Electron <script>document.write(process.versions.electron)</script>.
+		<br/><br/>
+		
+		<button id = "add">获取数据</button><br/>
+	  
+		<table  class="table" border="1">
+			<tr>
+				<th>图片</th>
+				<th>标题</th>
+				<th>价格</th>
+				<th>详情</th>
+				<th>销量</th>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="hint" style="display:none" id="main"></div>
 </body>
 
 
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
 <script>if (typeof module === 'object') {window.jQuery = window.$ = module.exports;};</script>
 <script>
+	// 基于准备好的dom，初始化echarts图表
+	var salesChart = echarts.init(document.getElementById('main')); 
+	
+	var times=[[1522306819000, 2], [1522306919000, 1], [1522307019000, 3], [1522307119000, 1], [1522307120000, 1],[1522307230000, 1], [1522302230000, 1], [1522307430000, 1], [1522407230000, 1]];
+	var option = {
+		title : {
+			text: '未来一周气温变化',
+			subtext: '纯属虚构'
+		},
+		tooltip : {
+			trigger: 'axis'
+		},
+		legend: {
+			data:['最高气温']
+		},
+		calculable : true,
+		xAxis : 
+		{
+			type : 'time',
+			splitLine: {
+				show: false
+			}
+		}
+		,
+		yAxis :
+		{
+			type : 'value',
+		},
+		series : [
+			{
+				name:'最高气温',
+				type:'line',
+				data: times,
+				markPoint : {
+					data : [
+						{type : 'max', name: '最大值'},
+						{type : 'min', name: '最小值'}
+					]
+				},
+				markLine : {
+					data : [
+						{type : 'average', name: '平均值'}
+					]
+				}
+			}
+		]
+	};
+
+	// 为echarts对象加载数据 
+	salesChart.setOption(option); 
+
 	const add = document.querySelector("#add");
 	const ipc = require('electron').ipcRenderer;
 	
@@ -36,42 +113,86 @@
        ipc.send('require-data','abcdefg');
 	}
 	
+	$('body').on('mouseenter', '.dataline', function() {  
+        //$(this).addClass('class_on');
+		console.log($(this).attr('data-goods_id'));
+		var goods_id = $(this).attr('data-goods_id');
+		ipc.send('get-goods-info',goods_id);
+    });
+	
+    $('body').on('mouseleave', '.dataline', function() {  
+		//.removeClass('class_on');  
+		// console.log($(this));
+		$('.hint').hide();
+    }); 
+  
+	$('body').on('mousemove', '.dataline', function(e) { 
+        $('.hint').show().css({  
+            "top": e.pageY+20,  
+            "left": e.pageX+20  
+        });
+    }); 
+	
+	
 	ipc.on('get-data', (event,dataStr ) => 
 	{
-		console.log(dataStr);
+		// console.log(dataStr);
 		createTable(dataStr);
 	});
+	
+	ipc.on('good-info',(event,dataStr) => 
+	{
+		// console.log(dataStr);
+		var data = jQuery.parseJSON(dataStr);
+		
+		// var date =  data.map((v) => {return v.op_time;});
+		// var sales = data.map((v) => {return v.op_sales;});
+		
+		var sales = [];
+		for(i in data) {
+			var itemData = [];
+			itemData.push(data[i].op_time);
+			itemData.push(data[i].op_sales);
+			sales.push(itemData);
+		}
+		
+		console.log(sales);
+		salesChart.setOption({           
+                series:[
+                    {
+                        name:"销售量",
+                        data:sales
+                    }
+                ]
+            })
+	});
+ 
 	
 	function showDetail(goods_id) {
 		console.log(goods_id);
 		ipc.send('show-detail', goods_id);
 	}
 	
-	
 	function deleteItem(a){
 		$(a).parents("tr").remove();
 	}
+	
+
 	function createTable(dataStr){
 		var data = jQuery.parseJSON(dataStr);
 		$.each(data,function(index,value){
 			
-			var imgStr = "<td>  <img src='" + value.hd_thumb_url +"' height='150' width='150'/> </td>";
+			var imgStr = "<td>  <img src='" + value.hd_thumb_url +"' height='80' width='80'/> </td>";
 			var titleStr = "<td>" + value.goods_name + "</td>";
 			var priceStr = "<td>" + (value.price / 100) + "</td>";
 			var salesStr = "<td>" + value.sales + "</td>";
 			var detailStr = "<td><a href='#' onclick='showDetail(" + value.goods_id + ");'>详情</a></td>";
 			
-			var tr = $("<tr>" + imgStr + titleStr + priceStr + salesStr + detailStr + "</tr>");
+			var tr = $("<tr class=dataline data-goods_id=" + value.goods_id + ">" + imgStr + titleStr + priceStr + salesStr + detailStr + "</tr>");
 			$("table").append(tr);
 		});
 
 	};
-
-
-
-
-	
-
 </script>
 
 
