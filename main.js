@@ -19,11 +19,11 @@ function createWindow () {
 	ipc.on('require-data',(event, arg)=> {
 		console.log(arg);
 		// event.sender.send('get-data', 'adfasdfasdfadf');
-		requireData(event);
+		requireData(event,arg);
 	});
 	
 	ipc.on('show-detail',(event,arg) => {
-		console.log(arg);
+		// console.log(arg);
 		detailWin = new BrowserWindow({width: 800, height: 1200});
 		detailWin.loadURL('http://mobile.yangkeduo.com/goods.html?goods_id=' + arg);
 	});
@@ -34,13 +34,15 @@ function createWindow () {
 	});
 }
 
-function requireData(event) {
+function requireData(event,arg) {
 	db.serialize(function() {
-		db.all("select * from goods",function(err,res){  
-        if(!err)  
-          event.sender.send('get-data', JSON.stringify(res));
-        else  
-          console.log(err);  
+		var SELERT_STR = 'select * from goods join goods_tags on goods.goods_id = goods_tags.goods_id where goods_tags.tags="' + arg + '" order by realtime_up desc';
+		console.log(SELERT_STR);
+		db.all(SELERT_STR,function(err,res){  
+			if(!err)  
+			  event.sender.send('get-data', JSON.stringify(res));
+			else  
+			  console.log(err);  
 		});
 	});
 }
