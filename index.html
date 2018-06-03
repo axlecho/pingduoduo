@@ -55,55 +55,11 @@
 <script>if (typeof module === 'object') {window.jQuery = window.$ = module.exports;};</script>
 <script>
 	// 基于准备好的dom，初始化echarts图表
-	var salesChart = echarts.init(document.getElementById('main')); 
 	
-	var times=[[1522306819000, 2], [1522306919000, 1], [1522307019000, 3], [1522307119000, 1], [1522307120000, 1],[1522307230000, 1], [1522302230000, 1], [1522307430000, 1], [1522407230000, 1]];
-	var option = {
-		title : {
-			text: '未来一周气温变化',
-			subtext: '纯属虚构'
-		},
-		tooltip : {
-			trigger: 'axis'
-		},
-		legend: {
-			data:['最高气温']
-		},
-		calculable : true,
-		xAxis : 
-		{
-			type : 'time',
-			splitLine: {
-				show: false
-			}
-		}
-		,
-		yAxis :
-		{
-			type : 'value',
-		},
-		series : [
-			{
-				name:'最高气温',
-				type:'line',
-				data: times,
-				markPoint : {
-					data : [
-						{type : 'max', name: '最大值'},
-						{type : 'min', name: '最小值'}
-					]
-				},
-				markLine : {
-					data : [
-						{type : 'average', name: '平均值'}
-					]
-				}
-			}
-		]
-	};
+
 
 	// 为echarts对象加载数据 
-	salesChart.setOption(option); 
+	// salesChart.setOption(option); 
 
 	const add = document.querySelector("#add");
 	const ipc = require('electron').ipcRenderer;
@@ -149,24 +105,62 @@
 		// var sales = data.map((v) => {return v.op_sales;});
 		
 		var sales = [];
+		var minDate = 2147483647;
+		var maxDate = -1;
 		for(i in data) {
 			var itemData = [];
 			itemData.push(data[i].op_time);
 			itemData.push(data[i].op_sales);
 			sales.push(itemData);
+			
+			if(minDate > data[i].op_time) { minDate = data[i].op_time;}
+			if(maxDate < data[i].op_time) { maxDate = data[i].op_time;};
 		}
 		
 		console.log(sales);
-		salesChart.setOption({           
-                series:[
-                    {
-                        name:"销售量",
-                        data:sales
-                    }
-                ]
-            })
+		
+		var salesChart = echarts.init(document.getElementById('main'));
+		salesChart.setOption({
+			title : {
+				text: '未来一周气温变化',
+				subtext: '纯属虚构'
+			},
+			tooltip : {
+				trigger: 'axis'
+			},
+			legend: {
+				data:['最高气温']
+			},
+			calculable : true,
+			xAxis : {
+				type : 'time',
+				min : minDate,
+				max : maxDate,
+				splitLine: {
+					show: false
+				}	
+			},
+			yAxis : {
+				type : 'value',
+				  max: 500000,
+				  min: 0,
+			},
+			series :{
+				name:'销售量',
+				type:'line',
+				data: sales,
+				markPoint : {
+					data : [
+						{type : 'max', name: '最大值'},
+						{type : 'min', name: '最小值'}
+					]
+				},
+				markLine : {
+					data :{type : 'average', name: '平均值'}
+				}
+			}
+		});
 	});
- 
 	
 	function showDetail(goods_id) {
 		console.log(goods_id);

@@ -2,17 +2,17 @@ var http = require('http');
 var sqlite3 = require('sqlite3');
 var async = require("async");
 var fs = require("fs");
+const {app, BrowserWindow} = require('electron');
 
 var DATABASE_STRING = "data.db";
-
 var exists = fs.existsSync(DATABASE_STRING);
 var db = new sqlite3.Database(DATABASE_STRING);
-var info;
 
-start();
+var keyword = "合金车";
+start(keyword);
 
-function start(){
-	http.get("http://apiv3.yangkeduo.com/search?page=1&size=50&sort=_sales&q="+encodeURIComponent("玩具") + "&pdduid=5799600966", function(res) {
+function start(keyword){
+	http.get("http://apiv3.yangkeduo.com/search?page=1&size=500&sort=_sales&q="+encodeURIComponent(keyword) + "&pdduid=5799600966", function(res) {
 		console.log("Got response: " + res.statusCode);
 		
 		var data = [];
@@ -25,8 +25,7 @@ function start(){
 			var body = JSON.parse(data.join(''));
 			
 			// console.log(body.items);
-			info = body.items;
-			init();
+			init(body.items);
 		});
 	}).on('error', function(e) {
 		console.log("Got error: " + e.message);
@@ -37,7 +36,7 @@ function start(){
 
 
 
-function init() {
+function init(info) {
 	db.serialize(function() {
 		if(!exists) {
 			db.run("create table goods (goods_id INT PRIMARY KEY NOT NULL,\
@@ -50,25 +49,26 @@ function init() {
 				goods_id INT NOT NULL,\
 				op_time INT   NOT NULL,\
 				op_sales INT NOT NULL)");
+				
+			db.run("create table goods_tags(id INTEGER PRIMARY KEY AUTOINCREMENT,\
+				goods_id INT NOT NULL,\
+				tags TEXT   NOT NULL)");
 		}
 		
-		save();
+		async.mapLimit(info, 20, async function(item) {
+			const id = await saveItem(item)
+			return id;
+		}, (err, results) => {
+			if (err) throw err
+			
+			console.log("deal with " + results.length + " items");
+			// console.log(results);
+			// app.quit();
+		});
 	});
 	
 	
 };
-
-function save() {
-	async.mapLimit(info, 20, async function(item) {
-		const id = await saveItem(item)
-		return id;
-	}, (err, results) => {
-		if (err) throw err
-		// results is now an array of the response bodies
-		// console.log(results)
-	});
-};
-
 
 function saveItem(item) {
 	const INSERT_GOODS = 'INSERT INTO goods \
@@ -85,14 +85,18 @@ function saveItem(item) {
 			+ new Date().getTime() + ',' 
 			+ item.sales + ')';
 			
+	const INSERT_TAGS = 'INSERT INTO goods_tags \
+		(goods_id,tags) \
+		VALUES (' + item.goods_id + ','
+		+ '"' + keyword + '"' + ')'; 
+		
+		
 	// console.log(INSERT_SALES);
 	db.serialize(function() {
-		db.run(INSERT_GOODS,function(){});
+		db.run(INSERT_TAGS,()=>{});
+		db.run(INSERT_GOODS,()=>{});
 		db.run(INSERT_SALES);
 	});
-	
-
-	
 	
 	// console.log(item.goods_name);
 	return item.goods_id;
