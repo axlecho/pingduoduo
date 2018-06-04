@@ -63,7 +63,10 @@ function initDatabase(done) {
 			sales INT NOT NULL,\
 			hd_thumb_url TEXT NOT NULL,\
 			price INT NOT NULL,\
-			realtime_up INT)");
+			realtime_up INT,\
+			daily_up INT,\
+			threeday_up INT,\
+			weekly_up INT)");
 			
 		db.run("create table goods_sales(id INTEGER PRIMARY KEY AUTOINCREMENT,\
 			goods_id INT NOT NULL,\
@@ -144,11 +147,79 @@ function saveItem(keyword,item) {
 					}
 				});
 			}
-			
+		});
 
+		// 计算增长量
+		db.all("select op_time from goods_sales where op_time < " + (time - 86400000) +　" limit 1",(err,res)=> {
+			// 	console.log(res[0].op_time);
+			if(res !== undefined && res.length !== 0) {
+					// console.log("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id);
+					db.all("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id ,(err,res) => {  
+					if(!err) {
+						if(res !== undefined && res.length !== 0) {
+							//console.log("=========");
+							//console.log(item);
+							//console.log(res[0]);
+							//console.log("==========");
+							db.run("update goods set daily_up = " + (item.sales - res[0].op_sales) + " where goods_id = " + item.goods_id);
+						}
+					} else  {
+						console.log(err);  
+					}
+				});
+			}
+		});
+		
+
+		// 计算增长量
+		db.all("select op_time from goods_sales where op_time < " + (time - 86400000 * 3) +　" limit 1",(err,res)=> {
+			// 	console.log(res[0].op_time);
+			if(res !== undefined && res.length !== 0) {
+					// console.log("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id);
+					db.all("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id ,(err,res) => {  
+					if(!err) {
+						if(res !== undefined && res.length !== 0) {
+							//console.log("=========");
+							//console.log(item);
+							//console.log(res[0]);
+							//console.log("==========");
+							db.run("update goods set threeday_up = " + (item.sales - res[0].op_sales) + " where goods_id = " + item.goods_id);
+						}
+					} else  {
+						console.log(err);  
+					}
+				});
+			}
+		});
+				
+		// 计算增长量
+		db.all("select op_time from goods_sales where op_time < " + (time - 86400000 * 7) +　" limit 1",(err,res)=> {
+			// 	console.log(res[0].op_time);
+			if(res !== undefined && res.length !== 0) {
+					// console.log("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id);
+					db.all("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id ,(err,res) => {  
+					if(!err) {
+						if(res !== undefined && res.length !== 0) {
+							//console.log("=========");
+							//console.log(item);
+							//console.log(res[0]);
+							//console.log("==========");
+							db.run("update goods set weekly_up = " + (item.sales - res[0].op_sales) + " where goods_id = " + item.goods_id);
+						}
+					} else  {
+						console.log(err);  
+					}
+				});
+			}
 		});
 	});
 	
 	// console.log(item.goods_name);
 	return item.goods_id;
+}
+
+
+
+function calculate(time) {
+
 }
