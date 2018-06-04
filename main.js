@@ -65,7 +65,7 @@ function requireGoodsInfo(event,goods_id) {
 }
 
 function download(event,goods_id) {
-	tool.world();
+	tool.download(goods_id);
 }
 
 

@@ -11,5 +11,5 @@ electron安装
 	
 依赖安装
 
-	$ cnpm install sqlite3@latest  async@latest request@latest --build-from-source --runtime=electron --target=2.0.2 --dist-url=https://atom.io/download/electron --save
+	$ cnpm install sqlite3@latest  async@latest request@latest cheerio@latest --build-from-source --runtime=electron --target=2.0.2 --dist-url=https://atom.io/download/electron --save
 
