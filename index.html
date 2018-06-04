@@ -56,7 +56,7 @@
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
 <script>if (typeof module === 'object') {window.jQuery = window.$ = module.exports;};</script>
 <script>
-	var myChart = echarts.init(document.getElementById('main'));
+
 
 
 		
@@ -117,7 +117,7 @@
 		}
 		
 		console.log(sales);
-		
+		var myChart = echarts.init(document.getElementById('main'));
 		myChart.setOption({
 			title: {
 				text: '销量增长'
@@ -128,18 +128,21 @@
 			legend: {
 				data:['销量']
 			},
-			toolbox: {
-				show : true,
-				feature : {
-					 mark : {show: true},
-					dataView : {show: true, readOnly: false},
-					magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-					restore : {show: true},
-					saveAsImage : {show: true}
-				}
-			},
+			//toolbox: {
+			//	show : true,
+			//	feature : {
+			//		mark : {show: true},
+			//		dataView : {show: true, readOnly: false},
+			//		magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+			//		restore : {show: true},
+			//		saveAsImage : {show: true}
+			//	}
+			//},
 			xAxis: {
-				type:'time'
+				type:'time',
+				splitLine: {
+					show: false
+				}
 				// data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
 			},
 			yAxis: {
@@ -148,7 +151,10 @@
 			series: [{
 				name: '销量',
 				type: 'line',
+				// symbol: 'triangle',
+				// symbolSize: 20,
 				data: sales,
+				showAllSymbol: true,
 				markPoint: {
 					data : [
 						{type : 'max', name: '最大值'},

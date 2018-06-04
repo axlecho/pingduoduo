@@ -128,29 +128,33 @@ function saveItem(keyword,item) {
 		db.run(INSERT_GOODS,()=>{});
 		db.run(INSERT_SALES);
 		
+		// console.log(time);
 		// 计算增长量
-		db.all("select op_time from goods_sales where op_time < " + time +　" limit 1",(err,res)=> {
-			// 	console.log(res[0].op_time);
-			if(res !== undefined && res.length !== 0) {
-					// console.log("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id);
-					db.all("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id ,(err,res) => {  
-					if(!err) {
-						if(res !== undefined && res.length !== 0) {
-							//console.log("=========");
-							//console.log(item);
-							//console.log(res[0]);
-							//console.log("==========");
-							db.run("update goods set realtime_up = " + (item.sales - res[0].op_sales) + " where goods_id = " + item.goods_id);
-						}
-					} else  {
-						console.log(err);  
-					}
-				});
+		db.all("select op_time from goods_sales where op_time < " + time +　" order by op_time desc  limit 1 ",(err,res)=> {
+			if(!err) {
+				if(res !== undefined && res.length !== 0) {
+						// console.log("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id);
+						db.all("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id ,(err,res) => {  
+						
+							if(res !== undefined && res.length !== 0) {
+								//console.log("=========");
+								//console.log(item);
+								//console.log(res[0]);
+								//console.log("==========");
+								
+								// console.log("update goods set realtime_up = " + (item.sales - res[0].op_sales) + " where goods_id = " + item.goods_id);
+								db.run("update goods set realtime_up = " + (item.sales - res[0].op_sales) + " where goods_id = " + item.goods_id);
+							}
+
+					});
+				}
+			} else  {
+				console.log(err);  
 			}
 		});
 
 		// 计算增长量
-		db.all("select op_time from goods_sales where op_time < " + (time - 86400000) +　" limit 1",(err,res)=> {
+		db.all("select op_time from goods_sales where op_time < " + (time - 86400000) +　" order by op_time desc  limit 1 " ,(err,res)=> {
 			// 	console.log(res[0].op_time);
 			if(res !== undefined && res.length !== 0) {
 					// console.log("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id);
@@ -172,7 +176,7 @@ function saveItem(keyword,item) {
 		
 
 		// 计算增长量
-		db.all("select op_time from goods_sales where op_time < " + (time - 86400000 * 3) +　" limit 1",(err,res)=> {
+		db.all("select op_time from goods_sales where op_time < " + (time - 86400000 * 3) +　" order by op_time desc  limit 1 ",(err,res)=> {
 			// 	console.log(res[0].op_time);
 			if(res !== undefined && res.length !== 0) {
 					// console.log("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id);
@@ -193,7 +197,7 @@ function saveItem(keyword,item) {
 		});
 				
 		// 计算增长量
-		db.all("select op_time from goods_sales where op_time < " + (time - 86400000 * 7) +　" limit 1",(err,res)=> {
+		db.all("select op_time from goods_sales where op_time < " + (time - 86400000 * 7) +　" order by op_time desc  limit 1 ",(err,res)=> {
 			// 	console.log(res[0].op_time);
 			if(res !== undefined && res.length !== 0) {
 					// console.log("select * from goods_sales where op_time=" + res[0].op_time  + " and goods_id=" + item.goods_id);
