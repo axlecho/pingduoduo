@@ -33,7 +33,7 @@ function run() {
 }
 
 function start(keyword,done){
-	http.get("http://apiv3.yangkeduo.com/search?page=1&size=50&sort=_sales&q="+encodeURIComponent(keyword) + "&pdduid=5799600966", function(res) {
+	http.get("http://apiv3.yangkeduo.com/search?page=1&size=1000&sort=_sales&q="+encodeURIComponent(keyword) + "&pdduid=5799600966", function(res) {
 		console.log("Got response: " + res.statusCode);
 		
 		var data = [];

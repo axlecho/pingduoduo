@@ -20,6 +20,7 @@
   "dependencies": {
     "async": "^2.6.1",
     "electron-rebuild": "^1.7.3",
+    "request": "^2.87.0",
     "sqlite3": "^4.0.0"
   }
 }

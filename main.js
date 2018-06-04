@@ -1,4 +1,5 @@
 const {app, BrowserWindow} = require('electron');
+const tool = require('./parse');
 
 //主进程
 const ipc = require('electron').ipcMain;
@@ -29,15 +30,20 @@ function createWindow () {
 	});
 	
 	ipc.on('get-goods-info',(event,arg) => {
-		console.log(arg);
+		// console.log(arg);
 		requireGoodsInfo(event,arg);
+	});
+	
+	ipc.on('downloadPic',(event,arg) => {
+		console.log(arg);
+		download(event,arg);
 	});
 }
 
 function requireData(event,arg) {
 	db.serialize(function() {
 		var SELERT_STR = 'select * from goods join goods_tags on goods.goods_id = goods_tags.goods_id where goods_tags.tags="' + arg + '" order by realtime_up desc';
-		console.log(SELERT_STR);
+		// console.log(SELERT_STR);
 		db.all(SELERT_STR,function(err,res){  
 			if(!err)  
 			  event.sender.send('get-data', JSON.stringify(res));
@@ -57,6 +63,11 @@ function requireGoodsInfo(event,goods_id) {
 		});
 	});
 }
+
+function download(event,goods_id) {
+	tool.world();
+}
+
 
 app.on('ready', createWindow)
 

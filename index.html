@@ -164,6 +164,11 @@
 		ipc.send('show-detail', goods_id);
 	}
 	
+	function downloadPic(goods_id) {
+		console.log(goods_id);
+		ipc.send('downloadPic', goods_id);
+	}
+	
 	function deleteItem(a){
 		$(a).parents("tr").remove();
 	}
@@ -172,7 +177,7 @@
 	function createTable(dataStr){
 		var data = jQuery.parseJSON(dataStr);
 		$("table").empty();
-		$("table").append("<tr><th>图片</th> <th>标题</th><th>价格</th><th>销量</th><th>销量增长</th><th>详情</th></tr>");
+		$("table").append("<tr><th>图片</th> <th>标题</th><th>价格</th><th>销量</th><th>销量增长</th><th>详情</th><th>下载</th></tr>");
 		$.each(data,function(index,value){
 			
 			var imgStr = "<td>  <img src='" + value.hd_thumb_url +"' height='80' width='80'/> </td>";
@@ -181,8 +186,8 @@
 			var salesStr = "<td>" + value.sales + "</td>";
 			var salesUpStr = "<td>" + value.realtime_up + "</td>";
 			var detailStr = "<td><a href='#' onclick='showDetail(" + value.goods_id + ");'>详情</a></td>";
-			
-			var tr = $("<tr class=dataline data-goods_id=" + value.goods_id + ">" + imgStr + titleStr + priceStr + salesStr + salesUpStr + detailStr + "</tr>");
+			var downloadStr = "<td><a href='#' onclick='downloadPic(" + value.goods_id + ");'>下载</a></td>";
+			var tr = $("<tr class=dataline data-goods_id=" + value.goods_id + ">" + imgStr + titleStr + priceStr + salesStr + salesUpStr + detailStr + downloadStr + "</tr>");
 			$("table").append(tr);
 		});
 
