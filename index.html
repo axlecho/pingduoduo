@@ -16,10 +16,9 @@
 	.hint{    
 		width:1000px;    
 		height:400px;   
-		background:#ffffffff;    
+		background:#fff;    
 		position:absolute;    
-		z-index:9;    
-		padding:6px;    
+		z-index:9;  
 		line-height:17px;    
 		text-align:left;    
 		top:1520px;    
@@ -84,7 +83,8 @@
 	$('body').on('mousemove', '.dataline', function(e) { 
         $('.hint').show().css({  
             "top": e.pageY+20,  
-            "left": e.pageX+20  
+            "left": e.pageX+20, 
+			"background":"#fff"
         });
     }); 
 	
