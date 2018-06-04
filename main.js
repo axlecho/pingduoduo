@@ -42,7 +42,7 @@ function createWindow () {
 
 function requireData(event,arg) {
 	db.serialize(function() {
-		var SELERT_STR = 'select * from goods join goods_tags on goods.goods_id = goods_tags.goods_id where goods_tags.tags="' + arg + '" order by realtime_up desc';
+		var SELERT_STR = 'select * from goods join goods_tags on goods.goods_id = goods_tags.goods_id where goods_tags.tags="' + arg + '" order by daily_up desc';
 		// console.log(SELERT_STR);
 		db.all(SELERT_STR,function(err,res){  
 			if(!err)  
