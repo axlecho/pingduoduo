@@ -22,6 +22,8 @@ function run() {
 		}},
 	(cb)=>{start("玩具",cb);},
 	(cb)=>{start("合金车",cb);},
+	(cb)=>{start("兼容乐高",cb);},
+	(cb)=>{start("救护车",cb);},
 	(cb)=>{start("包包",cb);}],
 	(err, result) =>{
 		if (err) {
