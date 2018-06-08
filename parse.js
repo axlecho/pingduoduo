@@ -40,6 +40,16 @@ function clear() {
 
 // clear();
 
+
+var excludeSpecial = function(s) {    
+    // 去掉转义字符    
+    s = s.replace(/[\'\"\\\/\b\f\n\r\t]/g, '');    
+    // 去掉特殊字符    
+    s = s.replace(/[\@\#\$\%\^\&\*\{\}\:\"\L\<\>\?]/);    
+    return s;    
+ };  
+ 
+ 
 function get(goods_id) {
 	// var detail = JSON.parse(fs.readFileSync('detail.json'));
 	
@@ -79,8 +89,7 @@ function get(goods_id) {
 				fs.mkdirSync("./data/");
 			}
 			
-			var root = "./data/" + detail.goods.goodsName + "/";
-			
+			var root = "./data/" +  excludeSpecial(detail.goods.goodsName) + "/";
 			if (!fs.existsSync(root)) {
 				fs.mkdirSync(root);
 			} else {
