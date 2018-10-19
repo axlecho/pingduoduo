@@ -6,7 +6,7 @@ var network = require('./network');
 
 
 function search(item,callback) {
-    network.getAllSearchResult(item)	
+    network.getAllSearchResult(item.key,item.filter)	
         .then(function (repos) {
             console.log('item total: ' + repos.items.length);
             parseList(repos.items);
@@ -27,9 +27,9 @@ function parseList(items) {
 }
 
 var list = [ 
-    "手机",
-    "07077",
-    "瓦力"
+    // "手机",
+    // "07077",
+    {key:"07077",filter:"蝙蝠"}
 ];
 
 async.eachSeries(list, (item, callback) => {

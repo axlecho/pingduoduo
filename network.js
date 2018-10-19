@@ -2,11 +2,13 @@ const rp = require('request-promise');
 const querystring = require('querystring');
 const async = require("async");
 
-var V = true;
-var HOST = 'http://apiv3.yangkeduo.com';
-var V4HOST = 'http://apiv4.yangkeduo.com';
-var SEARCH_PATH = '/search?';
-var GOODS_INFO_PATH = '/goods/';
+const V = true;
+const HOST = 'http://apiv3.yangkeduo.com';
+const V4HOST = 'http://apiv4.yangkeduo.com';
+const SEARCH_PATH = '/search?';
+const GOODS_INFO_PATH = '/goods/';
+const MAX_GOODS = 300;
+const MAX_PAGE = 10;
 
 var HEADER = {
             'User-Agent': 'android Mozilla/5.0 (Linux; Android 6.0.1; MuMu Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/52.0.2743.100 Mobile Safari/537.36  phh_android_version/3.23.0 phh_android_build/228842 phh_android_channel/qihu360',
@@ -55,7 +57,7 @@ function getSearchResult(word,page,size) {
     return rp(opt);
 }
 
-function getAllSearchResult(word) {
+function getAllSearchResult(word,filter) {
     var page = 1;
     var size = 25;
     var result = {
@@ -70,16 +72,27 @@ function getAllSearchResult(word) {
             function(whileCb) {
                 getSearchResult(word,page,size)
                     .then(function (repos) {
+						
+						var tmp = [];
+						if(filter) {
+							for(var i=0,length=repos.items.length;i<length;i++){
+								if(repos.items[i].goods_name.lastIndexOf(filter) != -1) {
+									tmp.push(repos.items[i]);
+								}
+							}
+						} else {
+							tmp = repos.items;
+						}
+						
                         if(V) {
-                            console.log(page + ' items:' + repos.items.length);
-                            console.log(page + ' total:' + repos.total);
+                            console.log(page + ' items:' + tmp.length);
                         }
                         
-                        result.total += repos.items.length;
-                        result.items = result.items.concat(repos.items);
+                        result.total += tmp.length;
+                        result.items = result.items.concat(tmp);
                         page ++;
                         
-                        if(repos.items.length == 0 || page > 10 || result.total > 300) {
+                        if(repos.items.length == 0 || page > MAX_PAGE || result.total > MAX_GOODS) {
                             whileCb("end");
                         } else {
                             whileCb();
