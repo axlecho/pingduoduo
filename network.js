@@ -71,15 +71,17 @@ function getAllSearchResult(word) {
                 getSearchResult(word,page,size)
                     .then(function (repos) {
                         if(V) {
+                            console.log(page + ' items:' + repos.items.length);
                             console.log(page + ' total:' + repos.total);
                         }
                         
-                        if(repos.total == 0 || page > 2) {
+                        result.total += repos.items.length;
+                        result.items = result.items.concat(repos.items);
+                        page ++;
+                        
+                        if(repos.items.length == 0 || page > 10 || result.total > 300) {
                             whileCb("end");
                         } else {
-                            result.total += repos.total;
-                            result.items = result.items.concat(repos.items);
-                            page ++;
                             whileCb();
                         }
                     })
@@ -89,12 +91,14 @@ function getAllSearchResult(word) {
                 
             },
             function(err) {
-                console.log(err);
+                // console.log(err);
+                
                 if(err === 'end') {
-                    resolve(result);
+                    
                 } else {
-                    reject(err);
+                    console.log(err.message);
                 }
+                resolve(result);
             }
         );
     });

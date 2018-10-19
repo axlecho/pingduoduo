@@ -5,23 +5,16 @@ var network = require('./network');
 
 
 
-function search() {
-    var list = [ 
-        "07077", 
-    ];
-    async.eachSeries(list, (item, callback) => {
-        network.getAllSearchResult(item)	
-            .then(function (repos) {
-                console.log('item total: ' + repos.items.length);
-                parseList(repos.items);
-                callback();
-            })
-            .catch(function (err) {
-                callback(err);
-            });
-    }, err => {
-        if (err) console.error(err.message);
-    });
+function search(item,callback) {
+    network.getAllSearchResult(item)	
+        .then(function (repos) {
+            console.log('item total: ' + repos.items.length);
+            parseList(repos.items);
+            callback();
+        })
+        .catch(function (err) {
+            callback(err);
+        });
 }
 
 function parseList(items) {
@@ -33,4 +26,14 @@ function parseList(items) {
     });   
 }
 
-search();
+var list = [ 
+    "手机",
+    "07077",
+    "瓦力"
+];
+
+async.eachSeries(list, (item, callback) => {
+    search(item,callback);
+}, err => {
+    if (err) console.error(err.message);
+});
