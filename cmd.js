@@ -45,12 +45,14 @@ function  marketAnalysis(keyword) {
 	var sum = 0;
 	network.getAllSearchResult(keyword,program.filter)	
         .then(function (repos) {
-            console.log('item total: ' + repos.items.length);
+			repos.items.sort(function(a,b){return a.sales-b.sales});
             for(var i=0,length=repos.items.length;i<length;i++){
                 console.log(repos.items[i].goods_name + ': ' + repos.items[i].sales);
+				console.log('http://mobile.yangkeduo.com/goods.html?goods_id=' + repos.items[i].goods_id);
 				sum += repos.items[i].sales;
             }
-            console.log('total :' + String(sum).red);
+			console.log('total items: ' + repos.items.length);
+            console.log('total sales:' + String(sum).red);
         })
         .catch(function (err) {
             console.log(err);
