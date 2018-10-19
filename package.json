@@ -4,9 +4,9 @@
   "description": "pinduoduo",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "spider": "electron app.js",
-	"d": "electron download.js"
+    "start": "node spider.js",
+    "d": "node download.js",
+    "s": "node spider.js"
   },
   "repository": {
     "type": "git",
@@ -21,8 +21,8 @@
   "dependencies": {
     "async": "^2.6.1",
     "cheerio": "^1.0.0-rc.2",
-    "electron-rebuild": "^1.7.3",
     "request": "^2.87.0",
+    "request-promise": "^4.2.2",
     "sqlite3": "^4.0.0"
   }
 }

@@ -51,7 +51,7 @@ var excludeSpecial = function(s) {
  
  
 function get(goods_id) {
-	// var detail = JSON.parse(fs.readFileSync('detail.json'));
+	// var detail = JSON.parse(fs.readFileSync('detail.initDataObj.json'));
 	
 	var mainDir = "main";
 	var detailDir = "detail";
@@ -89,7 +89,7 @@ function get(goods_id) {
 				fs.mkdirSync("./data/");
 			}
 			
-			var root = "./data/" +  excludeSpecial(detail.goods.goodsName) + "/";
+			var root = "./data/" +  excludeSpecial(detail.initDataObj.goods.goodsName) + "/";
 			if (!fs.existsSync(root)) {
 				fs.mkdirSync(root);
 			} else {
@@ -97,34 +97,34 @@ function get(goods_id) {
 			}
 			
 			// 主图
-			// console.log(detail.goods.topGallery);
+			// console.log(detail.initDataObj.goods.topGallery);
 			if (!fs.existsSync(root + mainDir)) {
 				fs.mkdirSync(root + mainDir);
-				for(var x in detail.goods.topGallery) {
-					download(detail.goods.topGallery[x],root + mainDir,x);
+				for(var x in detail.initDataObj.goods.topGallery) {
+					download(detail.initDataObj.goods.topGallery[x],root + mainDir,x);
 				}
 			}
 
 
 			// 详情图
-			// console.log(detail.goods.detailGallery);
+			// console.log(detail.initDataObj.goods.detailGallery);
 			if (!fs.existsSync(root + detailDir)) {
 				fs.mkdirSync(root + detailDir);
 				
-				for(var x in detail.goods.detailGallery) {
-					download(detail.goods.detailGallery[x].url,root + detailDir,x);
+				for(var x in detail.initDataObj.goods.detailGallery) {
+					download(detail.initDataObj.goods.detailGallery[x].url,root + detailDir,x);
 				}
 			}
 
 
 			// sku
-			// console.log(detail.goods.skus);
+			// console.log(detail.initDataObj.goods.skus);
 			if (!fs.existsSync(root + skuDir)) {
 				fs.mkdirSync(root + skuDir);
 				try {
-					for(var x in detail.goods.skus) {
-						// console.log(detail.goods.skus[x]);
-						download(detail.goods.skus[x].thumbUrl,root + skuDir,detail.goods.skus[x].specs[0].spec_value);
+					for(var x in detail.initDataObj.goods.skus) {
+						// console.log(detail.initDataObj.goods.skus[x]);
+						download(detail.initDataObj.goods.skus[x].thumbUrl,root + skuDir,detail.initDataObj.goods.skus[x].specs[0].spec_value);
 					}
 				} catch (err) {
 					

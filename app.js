@@ -2,15 +2,15 @@ var http = require('http');
 var sqlite3 = require('sqlite3');
 var async = require("async");
 var fs = require("fs");
-const {app, BrowserWindow} = require('electron');
+// const {app, BrowserWindow} = require('electron');
 
 var DATABASE_STRING = "data.db";
 var exists = fs.existsSync(DATABASE_STRING);
 var db = new sqlite3.Database(DATABASE_STRING);
 const time = new Date().getTime();
 
-run();
-
+// run();
+start("07077",()=>{});
 
 function run() {
  async.waterfall([
@@ -34,8 +34,13 @@ function run() {
 	});
 }
 
+var antiStr = "0ajeJyNj09Lw0AUxN9r7cWbB0+CLHhpUZPdbjbZZ09SUaG2IgbbmzRpYtOsyaYN9c/ZD+4e/AAyMIfhNzCDAIAL6GAKx5gfrdvWXvm+GEYedxI+wCGuu9D96UIvgVPcnAgudai1JE6RJKkuhZKkFREF0MOygwBnaFhIlKd5oEjk6VBmESWustJaEPFgSBIOsMYv59Z5D5sOpLDH7W5afxfGLH3lcdafF9Wq/tixWcyE2zNiLgiDEfsMgwG7ttZk8yyZFK2vZOTJkPUn9/H04YKZoszYXZaW9YCN19v6PfNDcn9kQJEnOGfPy3y5Lf5qcI67/sKuGmPHjeG0qVS8MfHrTD3W9kbMdLF/eSufqmpymyQObv8N/wKgW1jw";
 function start(keyword,done){
-	http.get("http://apiv3.yangkeduo.com/search?page=1&size=1000&sort=_sales&q="+encodeURIComponent(keyword) + "&pdduid=5799600966", function(res) {
+	int req = "http://apiv3.yangkeduo.com/search?page=1&size=1000&sort=_sales&q=" + encodeURIComponent(keyword) + "&anti_content=" + encodeURIComponent(antiStr);
+
+	console.log("req: " + req);
+
+	http.get(req, function(res) {
 		console.log("Got response: " + res.statusCode);
 		
 		var data = [];
@@ -54,8 +59,6 @@ function start(keyword,done){
 		console.log("Got error: " + e.message);
 	});
 }
-
-
 
 function initDatabase(done) {
 	
@@ -223,8 +226,6 @@ function saveItem(keyword,item) {
 	// console.log(item.goods_name);
 	return item.goods_id;
 }
-
-
 
 function calculate(time) {
 
