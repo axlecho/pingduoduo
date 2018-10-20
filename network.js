@@ -9,6 +9,7 @@ const SEARCH_PATH = '/search?';
 const GOODS_INFO_PATH = '/goods/';
 const MAX_GOODS = 300;
 const MAX_PAGE = 10;
+const DELAY = 3000;
 
 var HEADER = {
             'User-Agent': 'android Mozilla/5.0 (Linux; Android 6.0.1; MuMu Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/52.0.2743.100 Mobile Safari/537.36  phh_android_version/3.23.0 phh_android_build/228842 phh_android_channel/qihu360',
@@ -95,7 +96,11 @@ function getAllSearchResult(word,filter) {
                         if(repos.items.length == 0 || page > MAX_PAGE || result.total > MAX_GOODS) {
                             whileCb("end");
                         } else {
-                            whileCb();
+                            // for anti spider
+                            // setTimeout(function() {
+                                whileCb();
+                            // }, DELAY);
+                            
                         }
                     })
                     .catch(function (err) {
