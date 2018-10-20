@@ -92,11 +92,11 @@ function marketAnalysisFromFile(file) {
             console.log('total items: ' + repos.items.length);
             console.log('total sales:' + repos.sum);
             console.log('\n\n\n');
-            setTimeout(()=>{callback()},1000);
+            setTimeout(()=>{callback()},3000);
         },
         (err)=>{
             console.log(err);
-            setTimeout(()=>{callback()},1000);
+            setTimeout(()=>{callback()},3000);
         });
     }, err => {
         if (err) console.error(err.message);
