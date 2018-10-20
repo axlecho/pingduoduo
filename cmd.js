@@ -51,6 +51,10 @@ function marketAnalysis(keyword,filter) {
     marketAnalysisInner(keyword,filter)
         .then(
         (repos)=>{
+			    for(var i=0,length=repos.items.length;i<length;i++){
+                    console.log(repos.items[i].goods_name + ': ' + repos.items[i].sales);
+                    console.log('http://mobile.yangkeduo.com/goods.html?goods_id=' + repos.items[i].goods_id);
+                }
             console.log('total items: ' + repos.items.length);
             console.log('total sales:' + String(repos.sum).red);
         },
@@ -67,8 +71,6 @@ function  marketAnalysisInner(keyword,filter) {
             .then(function (repos) {
                 repos.items.sort(function(a,b){return a.sales-b.sales});
                 for(var i=0,length=repos.items.length;i<length;i++){
-                    // console.log(repos.items[i].goods_name + ': ' + repos.items[i].sales);
-                    // console.log('http://mobile.yangkeduo.com/goods.html?goods_id=' + repos.items[i].goods_id);
                     sum += repos.items[i].sales;
                 }
                 

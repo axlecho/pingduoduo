@@ -1,0 +1,225 @@
+  -  cheese
+[ { keyword: '16003', filter: '瓦力' },
+  { keyword: '03002', filter: '星堡' },
+  { keyword: '05001', filter: '天空之城' },
+  { keyword: '16057', filter: '百兽王' },
+  { keyword: '04001', filter: '异形' },
+  { keyword: '01101', filter: '中华街' },
+  { keyword: '01013', filter: '女孩' },
+  { keyword: '07101', filter: '反浩克' },
+  { keyword: '01014', filter: '房子' },
+  { keyword: '07077', filter: '蝙蝠' },
+  { keyword: '03008', filter: '兰博基尼' },
+  { keyword: '16006', filter: '黑珍珠' } ]
+-k 16003 -f 瓦力
+http://apiv3.yangkeduo.com/search?q=16003&page=1&size=25&requery=1
+1 items:25
+http://apiv3.yangkeduo.com/search?q=16003&page=2&size=25&requery=1
+2 items:27
+http://apiv3.yangkeduo.com/search?q=16003&page=3&size=25&requery=1
+3 items:33
+http://apiv3.yangkeduo.com/search?q=16003&page=4&size=25&requery=1
+4 items:32
+http://apiv3.yangkeduo.com/search?q=16003&page=5&size=25&requery=1
+5 items:33
+http://apiv3.yangkeduo.com/search?q=16003&page=6&size=25&requery=1
+6 items:35
+http://apiv3.yangkeduo.com/search?q=16003&page=7&size=25&requery=1
+7 items:39
+http://apiv3.yangkeduo.com/search?q=16003&page=8&size=25&requery=1
+8 items:37
+http://apiv3.yangkeduo.com/search?q=16003&page=9&size=25&requery=1
+9 items:38
+http://apiv3.yangkeduo.com/search?q=16003&page=10&size=25&requery=1
+10 items:47
+total items: 346
+total sales:86
+
+
+
+
+-k 03002 -f 星堡
+http://apiv3.yangkeduo.com/search?q=03002&page=1&size=25&requery=1
+1 items:21
+http://apiv3.yangkeduo.com/search?q=03002&page=2&size=25&requery=1
+2 items:29
+http://apiv3.yangkeduo.com/search?q=03002&page=3&size=25&requery=1
+3 items:22
+http://apiv3.yangkeduo.com/search?q=03002&page=4&size=25&requery=1
+4 items:0
+total items: 72
+total sales:0
+
+
+
+
+-k 05001 -f 天空之城
+http://apiv3.yangkeduo.com/search?q=05001&page=1&size=25&requery=1
+1 items:29
+http://apiv3.yangkeduo.com/search?q=05001&page=2&size=25&requery=1
+2 items:33
+http://apiv3.yangkeduo.com/search?q=05001&page=3&size=25&requery=1
+3 items:0
+total items: 62
+total sales:0
+
+
+
+
+-k 16057 -f 百兽王
+http://apiv3.yangkeduo.com/search?q=16057&page=1&size=25&requery=1
+1 items:46
+http://apiv3.yangkeduo.com/search?q=16057&page=2&size=25&requery=1
+2 items:42
+http://apiv3.yangkeduo.com/search?q=16057&page=3&size=25&requery=1
+3 items:46
+http://apiv3.yangkeduo.com/search?q=16057&page=4&size=25&requery=1
+4 items:44
+http://apiv3.yangkeduo.com/search?q=16057&page=5&size=25&requery=1
+5 items:42
+http://apiv3.yangkeduo.com/search?q=16057&page=6&size=25&requery=1
+6 items:50
+http://apiv3.yangkeduo.com/search?q=16057&page=7&size=25&requery=1
+7 items:46
+total items: 316
+total sales:16
+
+
+
+
+-k 04001 -f 异形
+http://apiv3.yangkeduo.com/search?q=04001&page=1&size=25&requery=1
+1 items:27
+http://apiv3.yangkeduo.com/search?q=04001&page=2&size=25&requery=1
+2 items:0
+total items: 27
+total sales:4
+
+
+
+
+-k 01101 -f 中华街
+http://apiv3.yangkeduo.com/search?q=01101&page=1&size=25&requery=1
+1 items:27
+http://apiv3.yangkeduo.com/search?q=01101&page=2&size=25&requery=1
+2 items:21
+http://apiv3.yangkeduo.com/search?q=01101&page=3&size=25&requery=1
+3 items:0
+total items: 48
+total sales:3
+
+
+
+
+-k 01013 -f 女孩
+http://apiv3.yangkeduo.com/search?q=01013&page=1&size=25&requery=1
+1 items:25
+http://apiv3.yangkeduo.com/search?q=01013&page=2&size=25&requery=1
+2 items:29
+http://apiv3.yangkeduo.com/search?q=01013&page=3&size=25&requery=1
+3 items:39
+http://apiv3.yangkeduo.com/search?q=01013&page=4&size=25&requery=1
+4 items:0
+total items: 93
+total sales:142
+
+
+
+
+-k 07101 -f 反浩克
+http://apiv3.yangkeduo.com/search?q=07101&page=1&size=25&requery=1
+1 items:40
+http://apiv3.yangkeduo.com/search?q=07101&page=2&size=25&requery=1
+2 items:43
+http://apiv3.yangkeduo.com/search?q=07101&page=3&size=25&requery=1
+3 items:46
+http://apiv3.yangkeduo.com/search?q=07101&page=4&size=25&requery=1
+4 items:46
+http://apiv3.yangkeduo.com/search?q=07101&page=5&size=25&requery=1
+5 items:49
+http://apiv3.yangkeduo.com/search?q=07101&page=6&size=25&requery=1
+6 items:49
+http://apiv3.yangkeduo.com/search?q=07101&page=7&size=25&requery=1
+7 items:49
+total items: 322
+total sales:288
+
+
+
+
+-k 01014 -f 房子
+http://apiv3.yangkeduo.com/search?q=01014&page=1&size=25&requery=1
+1 items:22
+http://apiv3.yangkeduo.com/search?q=01014&page=2&size=25&requery=1
+2 items:35
+http://apiv3.yangkeduo.com/search?q=01014&page=3&size=25&requery=1
+3 items:37
+http://apiv3.yangkeduo.com/search?q=01014&page=4&size=25&requery=1
+4 items:0
+http://apiv3.yangkeduo.com/search?q=01014&page=5&size=25&requery=1
+5 items:0
+total items: 94
+total sales:128
+
+
+
+
+-k 07077 -f 蝙蝠
+http://apiv3.yangkeduo.com/search?q=07077&page=1&size=25&requery=1
+1 items:46
+http://apiv3.yangkeduo.com/search?q=07077&page=2&size=25&requery=1
+2 items:38
+http://apiv3.yangkeduo.com/search?q=07077&page=3&size=25&requery=1
+3 items:30
+http://apiv3.yangkeduo.com/search?q=07077&page=4&size=25&requery=1
+4 items:46
+http://apiv3.yangkeduo.com/search?q=07077&page=5&size=25&requery=1
+5 items:48
+http://apiv3.yangkeduo.com/search?q=07077&page=6&size=25&requery=1
+6 items:21
+http://apiv3.yangkeduo.com/search?q=07077&page=7&size=25&requery=1
+7 items:0
+total items: 229
+total sales:200
+
+
+
+
+-k 03008 -f 兰博基尼
+http://apiv3.yangkeduo.com/search?q=03008&page=1&size=25&requery=1
+1 items:3
+http://apiv3.yangkeduo.com/search?q=03008&page=2&size=25&requery=1
+2 items:10
+http://apiv3.yangkeduo.com/search?q=03008&page=3&size=25&requery=1
+3 items:4
+http://apiv3.yangkeduo.com/search?q=03008&page=4&size=25&requery=1
+4 items:0
+total items: 17
+total sales:4
+
+
+
+
+-k 16006 -f 黑珍珠
+http://apiv3.yangkeduo.com/search?q=16006&page=1&size=25&requery=1
+1 items:7
+http://apiv3.yangkeduo.com/search?q=16006&page=2&size=25&requery=1
+2 items:18
+http://apiv3.yangkeduo.com/search?q=16006&page=3&size=25&requery=1
+3 items:19
+http://apiv3.yangkeduo.com/search?q=16006&page=4&size=25&requery=1
+4 items:23
+http://apiv3.yangkeduo.com/search?q=16006&page=5&size=25&requery=1
+5 items:28
+http://apiv3.yangkeduo.com/search?q=16006&page=6&size=25&requery=1
+6 items:46
+http://apiv3.yangkeduo.com/search?q=16006&page=7&size=25&requery=1
+7 items:35
+http://apiv3.yangkeduo.com/search?q=16006&page=8&size=25&requery=1
+8 items:0
+total items: 176
+total sales:281
+
+
+
+
