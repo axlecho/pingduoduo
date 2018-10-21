@@ -5,8 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "node spider.js",
-    "d": "node download.js",
-    "s": "node spider.js"
+    "c": "node cmd.js"
   },
   "repository": {
     "type": "git",
