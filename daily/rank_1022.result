@@ -1,0 +1,225 @@
+> node cmd.js -r --file  .\test\my.json
+  -  cheese
+[ { keyword: '16003', filter: '瓦力', goods_id: 3379447083 },
+  { keyword: '03002', filter: '星堡', goods_id: 2750773504 },
+  { keyword: '05001', filter: '天空之城', goods_id: 2753713034 },
+  { keyword: '16057', filter: '百兽王', goods_id: 2750822879 },
+  { keyword: '04001', filter: '星堡', goods_id: 3379447083 },
+  { keyword: '01101', filter: '中华街', goods_id: 2746141816 },
+  { keyword: '01013', filter: '女孩', goods_id: 2746138267 },
+  { keyword: '07101', filter: '反浩克', goods_id: 2741215364 },
+  { keyword: '01014', filter: '房子', goods_id: 2711483960 },
+  { keyword: '07077', filter: '蝙蝠', goods_id: 2711466442 },
+  { keyword: '03008', filter: '兰博基尼', goods_id: 2711247966 },
+  { keyword: '16006', filter: '黑珍珠', goods_id: 2698832309 },
+  { keyword: '20086', filter: '布加迪', goods_id: 3551629452 } ]
+-k 16003 -f 瓦力
+http://apiv3.yangkeduo.com/search?q=16003&page=1&size=25&requery=1
+1 items:60
+http://apiv3.yangkeduo.com/search?q=16003&page=2&size=25&requery=1
+2 items:50
+http://apiv3.yangkeduo.com/search?q=16003&page=3&size=25&requery=1
+3 items:50
+http://apiv3.yangkeduo.com/search?q=16003&page=4&size=25&requery=1
+4 items:50
+http://apiv3.yangkeduo.com/search?q=16003&page=5&size=25&requery=1
+5 items:50
+http://apiv3.yangkeduo.com/search?q=16003&page=6&size=25&requery=1
+6 items:50
+item total: 310
+find!!!!  -- rank 175
+
+
+
+
+-k 03002 -f 星堡
+http://apiv3.yangkeduo.com/search?q=03002&page=1&size=25&requery=1
+1 items:50
+http://apiv3.yangkeduo.com/search?q=03002&page=2&size=25&requery=1
+2 items:50
+http://apiv3.yangkeduo.com/search?q=03002&page=3&size=25&requery=1
+3 items:52
+http://apiv3.yangkeduo.com/search?q=03002&page=4&size=25&requery=1
+4 items:2
+http://apiv3.yangkeduo.com/search?q=03002&page=5&size=25&requery=1
+5 items:0
+failed  -- rank 154 +
+
+
+
+
+-k 05001 -f 天空之城
+http://apiv3.yangkeduo.com/search?q=05001&page=1&size=25&requery=1
+1 items:53
+http://apiv3.yangkeduo.com/search?q=05001&page=2&size=25&requery=1
+2 items:40
+http://apiv3.yangkeduo.com/search?q=05001&page=3&size=25&requery=1
+3 items:0
+failed  -- rank 93 +
+
+
+
+
+-k 16057 -f 百兽王
+http://apiv3.yangkeduo.com/search?q=16057&page=1&size=25&requery=1
+1 items:50
+http://apiv3.yangkeduo.com/search?q=16057&page=2&size=25&requery=1
+2 items:50
+http://apiv3.yangkeduo.com/search?q=16057&page=3&size=25&requery=1
+3 items:50
+http://apiv3.yangkeduo.com/search?q=16057&page=4&size=25&requery=1
+4 items:50
+http://apiv3.yangkeduo.com/search?q=16057&page=5&size=25&requery=1
+5 items:50
+http://apiv3.yangkeduo.com/search?q=16057&page=6&size=25&requery=1
+6 items:50
+http://apiv3.yangkeduo.com/search?q=16057&page=7&size=25&requery=1
+7 items:50
+failed  -- rank 350 +
+
+
+
+
+-k 04001 -f 星堡
+http://apiv3.yangkeduo.com/search?q=04001&page=1&size=25&requery=1
+1 items:56
+http://apiv3.yangkeduo.com/search?q=04001&page=2&size=25&requery=1
+2 items:0
+failed  -- rank 56 +
+
+
+
+
+-k 01101 -f 中华街
+http://apiv3.yangkeduo.com/search?q=01101&page=1&size=25&requery=1
+1 items:50
+http://apiv3.yangkeduo.com/search?q=01101&page=2&size=25&requery=1
+2 items:24
+http://apiv3.yangkeduo.com/search?q=01101&page=3&size=25&requery=1
+3 items:0
+failed  -- rank 74 +
+
+
+
+
+-k 01013 -f 女孩
+http://apiv3.yangkeduo.com/search?q=01013&page=1&size=25&requery=1
+1 items:60
+http://apiv3.yangkeduo.com/search?q=01013&page=2&size=25&requery=1
+2 items:50
+http://apiv3.yangkeduo.com/search?q=01013&page=3&size=25&requery=1
+3 items:38
+http://apiv3.yangkeduo.com/search?q=01013&page=4&size=25&requery=1
+4 items:0
+item total: 148
+find!!!!  -- rank 88
+
+
+
+
+-k 07101 -f 反浩克
+http://apiv3.yangkeduo.com/search?q=07101&page=1&size=25&requery=1
+1 items:60
+http://apiv3.yangkeduo.com/search?q=07101&page=2&size=25&requery=1
+2 items:50
+http://apiv3.yangkeduo.com/search?q=07101&page=3&size=25&requery=1
+3 items:50
+http://apiv3.yangkeduo.com/search?q=07101&page=4&size=25&requery=1
+4 items:50
+http://apiv3.yangkeduo.com/search?q=07101&page=5&size=25&requery=1
+5 items:50
+http://apiv3.yangkeduo.com/search?q=07101&page=6&size=25&requery=1
+6 items:50
+item total: 310
+find!!!!  -- rank 235
+
+
+
+
+-k 01014 -f 房子
+http://apiv3.yangkeduo.com/search?q=01014&page=1&size=25&requery=1
+1 items:50
+http://apiv3.yangkeduo.com/search?q=01014&page=2&size=25&requery=1
+2 items:50
+http://apiv3.yangkeduo.com/search?q=01014&page=3&size=25&requery=1
+3 items:50
+http://apiv3.yangkeduo.com/search?q=01014&page=4&size=25&requery=1
+4 items:39
+http://apiv3.yangkeduo.com/search?q=01014&page=5&size=25&requery=1
+5 items:0
+item total: 189
+find!!!!  -- rank 74
+
+
+
+
+-k 07077 -f 蝙蝠
+http://apiv3.yangkeduo.com/search?q=07077&page=1&size=25&requery=1
+1 items:57
+http://apiv3.yangkeduo.com/search?q=07077&page=2&size=25&requery=1
+2 items:49
+http://apiv3.yangkeduo.com/search?q=07077&page=3&size=25&requery=1
+3 items:50
+http://apiv3.yangkeduo.com/search?q=07077&page=4&size=25&requery=1
+4 items:50
+http://apiv3.yangkeduo.com/search?q=07077&page=5&size=25&requery=1
+5 items:50
+http://apiv3.yangkeduo.com/search?q=07077&page=6&size=25&requery=1
+6 items:25
+http://apiv3.yangkeduo.com/search?q=07077&page=7&size=25&requery=1
+7 items:0
+item total: 281
+find!!!!  -- rank 98
+
+
+
+
+-k 03008 -f 兰博基尼
+http://apiv3.yangkeduo.com/search?q=03008&page=1&size=25&requery=1
+1 items:50
+http://apiv3.yangkeduo.com/search?q=03008&page=2&size=25&requery=1
+2 items:50
+http://apiv3.yangkeduo.com/search?q=03008&page=3&size=25&requery=1
+3 items:19
+http://apiv3.yangkeduo.com/search?q=03008&page=4&size=25&requery=1
+4 items:0
+failed  -- rank 119 +
+
+
+
+
+-k 16006 -f 黑珍珠
+http://apiv3.yangkeduo.com/search?q=16006&page=1&size=25&requery=1
+1 items:60
+http://apiv3.yangkeduo.com/search?q=16006&page=2&size=25&requery=1
+2 items:50
+http://apiv3.yangkeduo.com/search?q=16006&page=3&size=25&requery=1
+3 items:50
+http://apiv3.yangkeduo.com/search?q=16006&page=4&size=25&requery=1
+4 items:50
+http://apiv3.yangkeduo.com/search?q=16006&page=5&size=25&requery=1
+5 items:50
+http://apiv3.yangkeduo.com/search?q=16006&page=6&size=25&requery=1
+6 items:50
+failed  -- rank 310 +
+
+
+
+
+-k 20086 -f 布加迪
+http://apiv3.yangkeduo.com/search?q=20086&page=1&size=25&requery=1
+1 items:59
+http://apiv3.yangkeduo.com/search?q=20086&page=2&size=25&requery=1
+2 items:50
+http://apiv3.yangkeduo.com/search?q=20086&page=3&size=25&requery=1
+3 items:49
+http://apiv3.yangkeduo.com/search?q=20086&page=4&size=25&requery=1
+4 items:50
+http://apiv3.yangkeduo.com/search?q=20086&page=5&size=25&requery=1
+5 items:50
+http://apiv3.yangkeduo.com/search?q=20086&page=6&size=25&requery=1
+6 items:50
+failed  -- rank 308 +
+
+
+
