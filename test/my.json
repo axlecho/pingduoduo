@@ -67,5 +67,10 @@
         "keyword": "05004",
         "filter": "x翼",
         "goods_id": 3572469181 
+    },  
+    {
+        "keyword": "02017",
+        "filter": "警察",
+        "goods_id": 3607580809 
     }
 ]
