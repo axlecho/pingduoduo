@@ -8,6 +8,8 @@ const V4HOST = 'http://apiv4.yangkeduo.com';
 const SEARCH_PATH = '/search?';
 const GOODS_INFO_PATH = '/goods/';
 const CLASS_PATH = '/operation/2681/groups?';
+const MALL_GOODSINFO_PATH = '/api/turing/mall/query_cat_goods?';
+const MALL_INFO_PATH = '/mall/';
 const MAX_GOODS = 300;
 const MAX_PAGE = 10;
 const DELAY = 3000;
@@ -149,6 +151,24 @@ function getGoodsInfo(good_id) {
     return rp(opt);
 }
 
+function getMallInfo(mall_id) {
+    // http://apiv3.yangkeduo.com/mall/8363337/info?pdduid=
+    opt.uri = HOST + MALL_INFO_PATH + mall_id + '/info?pdduid=';
+    return rp(opt);
+}
+
+function getMallGoodsInfo(mall_id) {
+    var param = querystring.stringify({
+        category_id: 0,
+        type: 0,
+        mall_id: mall_id,
+        page_no: 1,
+        page_size: 1000
+    });
+    opt.uri = HOST + MALL_GOODSINFO_PATH + param;
+    return rp(opt);
+}
+  
 /*
 test()
 	.then(function (repos) {
@@ -179,6 +199,28 @@ getGoodsInfo(3379447083)
 	});
 */
 
+/*
+getMallGoodsInfo(8363337)
+	.then(function (repos) {
+		console.log(repos);
+	})
+	.catch(function (err) {
+		console.log(err);
+	});
+*/
+
+/*
+getMallInfo(8363337)	
+    .then(function (repos) {
+		console.log(repos);
+	})
+	.catch(function (err) {
+		console.log(err);
+	});
+*/
+
+exports.getMallGoodsInfo = getMallGoodsInfo;
+exports.getMallInfo = getMallInfo;
 exports.getAllSearchResult = getAllSearchResult;
 exports.getSearchResult = getSearchResult;
 exports.getGoodsInfo = getGoodsInfo;

@@ -1,47 +1,41 @@
 var async = require("async");
 var network = require('./network');
+var PddDatabase = require('./database');
+var pdb = new PddDatabase();
+const DELAY = 4000;
 
-function search(item,callback) {
-    network.getAllSearchResult(item.key,item.filter)	
-        .then(function (repos) {
-            console.log('item total: ' + repos.items.length);
-            parseList(repos.items);
-            callback();
-        })
-        .catch(function (err) {
-            callback(err);
-        });
+function test() {
+    pdb.getMalls()
+    .then((row) => {
+        getMallsInfo(row);
+    },(err) => {
+        console.log(err);
+    });
 }
 
-function parseList(items) {
-    async.eachSeries(items, (item, callback) => { 
-        console.log(item.goods_name);
-        callback();
+function getMallsInfo(row) {
+    async.eachSeries(row, (item, callback) => { 
+        console.log(item);
+        if(item.mall_name != null) {
+            console.log('  ==> ' + item.mall_name);
+        } else {
+            console.log('  ==> ' + item.mall_id);
+        }
+        
+        network.getMallInfo(item.mall_id)
+            .then((repos) => {
+                pdb.updateMallInfo(repos)
+                    .then(() => {setTimeout(()=>{callback()},DELAY);},
+                        (err) => {throw err;});
+            })
+            .catch((err) => {
+                console.log(err);
+                setTimeout(()=>{callback()},DELAY);
+            });
+        
     }, err => {
         if (err) console.error(err.message);
-    });   
+    });
 }
 
-function getClass() {
-    network.getClass(0,1000)
-        .then(function (repos) {
-            console.log('goods list length: ' + repos.goods_list.length);
-        })
-        .catch(function (err) {
-            console.log(err);
-        });
-}   
-    
-var list = [ 
-    // "手机",
-    // "07077",
-    {key:"07077",filter:"蝙蝠"}
-];
-
-// async.eachSeries(list, (item, callback) => {
-//    search(item,callback);
-//}, err => {
-//    if (err) console.error(err.message);
-//});
-
-getClass();
+test();
