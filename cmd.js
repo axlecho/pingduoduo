@@ -9,6 +9,7 @@ program
     .version('0.0.1')
 		.option('-r, --rank', '查询排名')
 		.option('-m, --market', '市场销量分析')
+        .option('--info <value>', '商品信息')
         .option('--file <value>', '市场分析文件')
         .option('-k, --keyword <value>', '查询关键词',"")
         .option('-g, --goods_id <n>', '查询商品代码', parseInt)
@@ -39,16 +40,27 @@ if (program.download) {
     download(program.download);
 }
 
+if (program.info) {
+    network.getGoodsInfo(program.info)
+        .then(
+            (repo) => {
+                console.log(repo);
+            },
+            (err) => {
+                console.log(err);
+            });
+}
+
 function goodsRanks(goods_id,keyword,filter) {
     goodsRanksInner(keyword,filter)
         .then(
-        (repo)=>{
-            console.log('item total: ' + repos.items.length);
-            console.log('find!!!!  -- rank ' + String(repos.rank).red);
-        },
-        (err)=>{
-            console.log(err);
-        });
+            (repo)=>{
+                console.log('item total: ' + repos.items.length);
+                console.log('find!!!!  -- rank ' + String(repos.rank).red);
+            },
+            (err)=>{
+                console.log(err);
+            });
 }
 
 function goodsRanksInner(goods_id,keyword,filter) {

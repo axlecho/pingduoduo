@@ -88,12 +88,16 @@ class PddDatabase {
 
     addGoods(goodsList,mall_id) {
         var promise = new Promise(function(resolve,reject) {
-            async.eachSeries(goodsList, (item, callback) => { 
+            async.eachSeries(goodsList, (item, callback) => {
+                var cnt = 0;
+                if(item.cnt != 0) {
+                    cnt = item.cnt;  
+                }               
                 db.serialize(function() {
-                   db.run("INSERT INTO goods(goods_id,goods_name,mall_id) VALUES (?,?,?);", [item.goods_id,item.goods_name,mall_id], 
+                    db.run("INSERT INTO goods(goods_id,goods_name,cnt,mall_id) VALUES (?,?,?);", [item.goods_id,item.goods_name,cnt,mall_id], 
                     (err) => {
                         if(err) {
-                            db.run("UPDATE goods set goods_name=?,mall_id=? where goods_id =?",[item.goods_id,item.goods_name,mall_id],
+                            db.run("UPDATE goods set goods_name=?,mall_id=?,cnt=? where goods_id =?",[item.goods_name,mall_id,cnt,item.goods_id],
                                 (err) => {
                                     if(err) {console.log(err.Error);}
                                     callback();
