@@ -7,17 +7,14 @@ const DELAY = 4000;
 
 
 function test() {
-    var target
-    pdb.getTarget()
-        .then(
-            (row) => {return pdb.getMalls();},
-            (err) => {console.log(err);}
-        )
-        .then(
-            (mallInfo) => {getMallsInfo(target,mallInfo);},
-            (err) => {console.log(err);}
-        );
-    
+        pdb.getMalls()
+            .then(
+                (mallInfo) => {return getMallsInfo(mallInfo);},
+                (err) => {console.log(err);}
+            ).then(
+                () => {return pullGoodsDetail();},
+                (err) => {console.log(err);}
+            );
 }
 
 function pullMallsInfo(mall_id) {
@@ -51,33 +48,79 @@ function pullMallsGoodsInfo(mall_id) {
     return promise;    
 }
 
-function getMallsInfo(target,row) {
-    async.eachSeries(row, (item, callback) => { 
-        // console.log(item);
-        if(item.mall_name != null) {
-            console.log(String('============> ' + item.mall_name).red);
-        } else {
-            console.log(String('============> ' + item.mall_id).red);
-        }
-        pullMallsInfo(item.mall_id)
-        .then(
-            () => {
-                pullMallsGoodsInfo(item.mall_id).then(
-                    () => {callback()},
-                    (err) => {
-                        console.log(err);
-                        callback();
-                    }
-                );
-            },
-            (err) => {
-                console.log(err);
-                callback()
+function getMallsInfo(row) {
+    var promise = new Promise(function(resolve, reject) {
+        async.eachSeries(row, (item, callback) => { 
+            // console.log(item);
+            if(item.mall_name != null) {
+                console.log(String('============> ' + item.mall_name).red);
+            } else {
+                console.log(String('============> ' + item.mall_id).red);
             }
-        );
-    }, err => {
-        if (err) console.error(err.message);
+            pullMallsInfo(item.mall_id)
+            .then(
+                () => {
+                    pullMallsGoodsInfo(item.mall_id).then(
+                        () => {callback()},
+                        (err) => {
+                            console.log(err);
+                            callback();
+                        }
+                    );
+                },
+                (err) => {
+                    console.log(err);
+                    callback()
+                }
+            );
+        }, err => {
+            if(err){
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
     });
+    return promise;  
 }
 
-test();
+function pullGoodsDetail() {
+    getGoodsByFilter()
+        .then(
+            (result) => {console.log(result);},
+            (err) => {console.log(err);});
+}
+
+function getGoodsByFilter() {
+        var promise = new Promise(function(resolve, reject) {
+            var filters;
+            var goodsByFilter = [];
+            pdb.getFilter()
+                .then((result) => {
+                    filters = result
+                    
+                    return pdb.getGoods();
+                },
+                (err) => {reject(err)})
+                .then((result) => {
+                    console.log(filters);
+                    result.forEach((item,index) => {
+                        filters.forEach((filter,index) => {
+                            if((item.goods_name.lastIndexOf(filter.keyword) != -1)
+                                    && (item.goods_name.lastIndexOf(filter.filter) != -1)){
+                                goodsByFilter.push(item);
+                            }
+                        });
+                    });
+                    
+                    resolve(goodsByFilter);
+                },
+                (err) => {reject(err);});;
+
+        });
+        return promise;
+
+    }
+// test();
+
+pullGoodsDetail();

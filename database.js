@@ -7,7 +7,7 @@ var db = new sqlite3.Database(DATABASE_STRING);
 var exists = fs.existsSync(DATABASE_STRING);
 
 class PddDatabase {
-    constructor(x, y) {
+    constructor() {
         if(exists) {
             return;
         }
@@ -53,7 +53,7 @@ class PddDatabase {
         return promise;
     }
     
-    getTarget() {
+    getFilter() {
         var promise = new Promise(function(resolve, reject) {
             db.serialize(function() {
                 db.all("select * from target",function(err,row){
@@ -69,6 +69,24 @@ class PddDatabase {
         return promise;
     }
     
+    getGoods() {
+        var promise = new Promise(function(resolve, reject) {
+            db.serialize(function() {
+                db.all("select * from goods",function(err,row){
+                    if(null != err) {
+                        reject(err);
+                        return;
+                    }
+                    
+                    resolve(row);
+                });
+            });
+        });
+        return promise;
+    }
+    
+
+        
     updateMallInfo(mallInfo) {
         var promise = new Promise(function(resolve,reject) {
             db.serialize(function() {
@@ -135,7 +153,7 @@ pddDatabase.getMalls()
     });
 */
 
-
+/*
 var pddDatabase = new PddDatabase();
 pddDatabase.getTarget()
     .then((row) => {
@@ -143,7 +161,7 @@ pddDatabase.getTarget()
     },(err) => {
         console.log(err);
     });
-    
+ */   
 module.exports = PddDatabase;
 
 
