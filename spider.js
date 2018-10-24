@@ -36,11 +36,12 @@ function pullMallsInfo(mall_id) {
     return promise;
 }
 
-function pullMallsGoodsInfoByFilter(filter,mall_id) {
+function pullMallsGoodsInfo(mall_id) {
    var promise = new Promise(function(resolve, reject) {
         network.getMallGoodsInfo(mall_id)
             .then((repos) => {
-                console.log(repos.goods_list);
+                console.log(repos.goods_list.length);
+                pdb.addGoods(repos.goods_list,mall_id);
                 setTimeout(()=>{resolve()},DELAY);
             })
             .catch((err) => {
@@ -61,7 +62,7 @@ function getMallsInfo(target,row) {
         pullMallsInfo(item.mall_id)
         .then(
             () => {
-                pullMallsGoodsInfoByFilter(target,item.mall_id).then(
+                pullMallsGoodsInfo(item.mall_id).then(
                     () => {callback()},
                     (err) => {
                         console.log(err);

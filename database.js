@@ -1,3 +1,4 @@
+var async = require("async");
 var sqlite3 = require('sqlite3');
 var fs = require("fs");
 
@@ -85,6 +86,34 @@ class PddDatabase {
         return promise;
     }
 
+    addGoods(goodsList,mall_id) {
+        var promise = new Promise(function(resolve,reject) {
+            async.eachSeries(goodsList, (item, callback) => { 
+                db.serialize(function() {
+                   db.run("INSERT INTO goods(goods_id,goods_name,mall_id) VALUES (?,?,?);", [item.goods_id,item.goods_name,mall_id], 
+                    (err) => {
+                        if(err) {
+                            db.run("UPDATE goods set goods_name=?,mall_id=? where goods_id =?",[item.goods_id,item.goods_name,mall_id],
+                                (err) => {
+                                    if(err) {console.log(err.Error);}
+                                    callback();
+                                });
+                        } else {
+                            callback();
+                        }
+                    });
+                });
+            },(err) => {
+                if(err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });         
+        });
+        return promise;        
+    }
+    
     test() {
         db.all("select * from mall",function(err,row){
             console.log(JSON.stringify(row));
