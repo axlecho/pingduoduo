@@ -154,6 +154,9 @@ function getGoodsInfo(good_id) {
 function getMallInfo(mall_id) {
     // http://apiv3.yangkeduo.com/mall/8363337/info?pdduid=
     opt.uri = HOST + MALL_INFO_PATH + mall_id + '/info?pdduid=';
+    if(V) {
+        console.log(opt.uri);
+    }
     return rp(opt);
 }
 
@@ -166,6 +169,9 @@ function getMallGoodsInfo(mall_id) {
         page_size: 1000
     });
     opt.uri = HOST + MALL_GOODSINFO_PATH + param;
+    if(V) {
+        console.log(opt.uri);
+    }
     return rp(opt);
 }
   

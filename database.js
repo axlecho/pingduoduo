@@ -52,6 +52,22 @@ class PddDatabase {
         return promise;
     }
     
+    getTarget() {
+        var promise = new Promise(function(resolve, reject) {
+            db.serialize(function() {
+                db.all("select * from target",function(err,row){
+                    if(null != err) {
+                        reject(err);
+                        return;
+                    }
+                    
+                    resolve(row);
+                });
+            });
+        });
+        return promise;
+    }
+    
     updateMallInfo(mallInfo) {
         var promise = new Promise(function(resolve,reject) {
             db.serialize(function() {
@@ -86,6 +102,15 @@ pddDatabase.getMalls()
     });
 */
 
+
+var pddDatabase = new PddDatabase();
+pddDatabase.getTarget()
+    .then((row) => {
+        console.log(row);
+    },(err) => {
+        console.log(err);
+    });
+    
 module.exports = PddDatabase;
 
 
