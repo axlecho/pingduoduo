@@ -103,10 +103,7 @@ function getAllSearchResult(word,filter) {
                             whileCb("end");
                         } else {
                             // for anti spider
-                            // setTimeout(function() {
-                                whileCb();
-                            // }, DELAY);
-                            
+                            setTimeout(()=> {whileCb()}, DELAY);
                         }
                     })
                     .catch(function (err) {
@@ -115,8 +112,6 @@ function getAllSearchResult(word,filter) {
                 
             },
             function(err) {
-                // console.log(err);
-                
                 if(err === 'end') {
                     
                 } else {

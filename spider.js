@@ -85,10 +85,42 @@ function getMallsInfo(row) {
 }
 
 function pullGoodsDetail() {
-    getGoodsByFilter()
+    getFilter()
         .then(
-            (result) => {getGoodDetail(result);},
-            (err) => {console.log(err);});
+            (result) => {return pullGoodsRank(result)},
+            (err) => {console.log(err)}
+        )
+        .then(
+            (result) => {return getGoodsByFilter(result)},
+            (err) => {console.log(err)}
+        )    
+        .then(
+            (result) => {getGoodDetail(result)},
+            (err) => {console.log(err)}
+        );
+}
+
+function pullGoodsRank(filters) {
+    var promise = new Promise(function(resolve, reject) {
+        async.eachSeries(filters, (filter, callback) => { 
+             network.getAllSearchResult(filter.keyword,null)	
+                .then(function (repos) {
+                    filter.goods_list = repos.items;
+                    callback();
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    callback();
+                });
+        }, (err) => {
+            if(err) {
+                reject(err)
+            } else {
+                resolve(filters);
+            }
+        });
+    });
+    return promise; 
 }
 
 function getGoodDetail(goodsList) {
@@ -96,7 +128,9 @@ function getGoodDetail(goodsList) {
         async.eachSeries(goodsList, (item, callback) => {
             network.getGoodsInfo(item.goods_id)
             .then(
-                (page) => {return pdb.savePage(page);},
+                (page) => {
+                    page.rank = item.rank;
+                    return pdb.savePage(page);},
                 (err) => {
                     console.log(err);
                     setTimeout(()=>{callback();},DELAY);
@@ -114,28 +148,24 @@ function getGoodDetail(goodsList) {
     return promise;    
 }
 
-function getGoodsByFilter() {
+function getFilter() {
+    return pdb.getFilter();
+}
+
+function getGoodsByFilter(filters) {
     var promise = new Promise(function(resolve, reject) {
-        var filters;
-        var goodsByFilter = [];
-        pdb.getFilter()
+        var goodsByFilter = [];  
+        pdb.getGoods()
             .then((result) => {
-                filters = result
-                
-                return pdb.getGoods();
-            },
-            (err) => {reject(err)})
-            .then((result) => {
-                console.log(filters);
                 result.forEach((item,index) => {
                     filters.forEach((filter,index) => {
                         if((item.goods_name.lastIndexOf(filter.keyword) != -1)
                                 && (item.goods_name.lastIndexOf(filter.filter) != -1)){
+                            item.rank = filter.goods_list.indexOf(item.goodid);
                             goodsByFilter.push(item);
                         }
                     });
                 });
-                
                 resolve(goodsByFilter);
             },
             (err) => {reject(err);});;
