@@ -87,40 +87,65 @@ function getMallsInfo(row) {
 function pullGoodsDetail() {
     getGoodsByFilter()
         .then(
-            (result) => {console.log(result);},
-            (err) => {console.log(err);});
+            (result) => {getGoodDetail(result);},
+            (err) => {console.log(err);})
+            ;
+}
+
+function getGoodDetail(goodsList) {
+    var promise = new Promise(function(resolve, reject) {
+        async.eachSeries(goodsList, (item, callback) => {
+            network.getGoodsInfo(item.goods_id)
+            .then(
+                (page) => {return pdb.savePage(page);},
+                (err) => {
+                    console.log(err);
+                    setTimeout(()=>{callback();},DELAY);
+                    
+                }
+            ).then(
+                () => {setTimeout(()=>{callback();},DELAY);},
+                (err) => {
+                    console.log(err);
+                    setTimeout(()=>{callback();},DELAY);
+                }
+            );
+        });            
+    });
+    return promise;    
 }
 
 function getGoodsByFilter() {
-        var promise = new Promise(function(resolve, reject) {
-            var filters;
-            var goodsByFilter = [];
-            pdb.getFilter()
-                .then((result) => {
-                    filters = result
-                    
-                    return pdb.getGoods();
-                },
-                (err) => {reject(err)})
-                .then((result) => {
-                    console.log(filters);
-                    result.forEach((item,index) => {
-                        filters.forEach((filter,index) => {
-                            if((item.goods_name.lastIndexOf(filter.keyword) != -1)
-                                    && (item.goods_name.lastIndexOf(filter.filter) != -1)){
-                                goodsByFilter.push(item);
-                            }
-                        });
+    var promise = new Promise(function(resolve, reject) {
+        var filters;
+        var goodsByFilter = [];
+        pdb.getFilter()
+            .then((result) => {
+                filters = result
+                
+                return pdb.getGoods();
+            },
+            (err) => {reject(err)})
+            .then((result) => {
+                console.log(filters);
+                result.forEach((item,index) => {
+                    filters.forEach((filter,index) => {
+                        if((item.goods_name.lastIndexOf(filter.keyword) != -1)
+                                && (item.goods_name.lastIndexOf(filter.filter) != -1)){
+                            goodsByFilter.push(item);
+                        }
                     });
-                    
-                    resolve(goodsByFilter);
-                },
-                (err) => {reject(err);});;
+                });
+                
+                resolve(goodsByFilter);
+            },
+            (err) => {reject(err);});;
 
-        });
-        return promise;
-
-    }
+    });
+    return promise;
+}
+    
+    
 // test();
 
 pullGoodsDetail();

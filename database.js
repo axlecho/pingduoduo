@@ -136,6 +136,33 @@ class PddDatabase {
         return promise;        
     }
     
+    savePage(page) {
+        var date = new Date();
+        var promise = new Promise(function(resolve,reject) {
+            db.serialize(function() {
+                db.run("INSERT INTO goods_detail(goods_id,cnt,sku,main_gallery,detail_gallery,time) VALUES (?,?,?,?,?,?);", 
+                    [page.goods_id,page.sales,JSON.stringify(page.sku),page.hd_thumb_url,page.hd_thumb_url,date], 
+                    (err) => {
+                        if(err) {
+                            console.log(err);
+                            db.run("UPDATE goods_detail set cnt=?,sku=?,main_gallery=?,detail_gallery=?,time=? where goods_id =?",
+                                [page.sales,JSON.stringify(page.sku),page.hd_thumb_url,page.hd_thumb_url,date,page.goods_id],
+                                (err) => {
+                                    if(err) {
+                                        reject(err);
+                                    } else {
+                                        resolve();
+                                    }
+                                });
+                        } else {
+                            reject(err);
+                        }
+                    });
+            });            
+        });
+        return promise;
+    }
+    
     test() {
         db.all("select * from mall",function(err,row){
             console.log(JSON.stringify(row));
