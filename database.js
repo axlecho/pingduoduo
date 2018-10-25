@@ -85,7 +85,21 @@ class PddDatabase {
         return promise;
     }
     
-
+	getGoodsDetail() {
+        var promise = new Promise(function(resolve, reject) {
+            db.serialize(function() {
+                db.all("select * from goods_detail",function(err,row){
+                    if(null != err) {
+                        reject(err);
+                        return;
+                    }
+                    
+                    resolve(row);
+                });
+            });
+        });
+        return promise;
+	}
         
     updateMallInfo(mallInfo) {
         var promise = new Promise(function(resolve,reject) {
@@ -137,18 +151,19 @@ class PddDatabase {
     }
     
     savePage(page) {
-        var date = new Date();
+        var date = new Date(new Date(new Date().toLocaleDateString()).getTime());
         var promise = new Promise(function(resolve,reject) {
             db.serialize(function() {
-                db.run("INSERT INTO goods_detail(goods_id,cnt,sku,main_gallery,detail_gallery,time) VALUES (?,?,?,?,?,?);", 
-                    [page.goods_id,page.sales,JSON.stringify(page.sku),page.hd_thumb_url,page.hd_thumb_url,date], 
+                db.run("INSERT INTO goods_detail(goods_id,cnt,sku,main_gallery,detail_gallery,time,goods_name,mall_id) VALUES (?,?,?,?,?,?,?,?);", 
+                    [page.goods_id,page.sales,JSON.stringify(page.sku),page.hd_thumb_url,page.hd_thumb_url,date,page.goods_name,page.mall_id], 
                     (err) => {
                         if(err) {
-                            console.log(err);
-                            db.run("UPDATE goods_detail set cnt=?,sku=?,main_gallery=?,detail_gallery=?,time=? where goods_id =?",
-                                [page.sales,JSON.stringify(page.sku),page.hd_thumb_url,page.hd_thumb_url,date,page.goods_id],
+                            // console.log(err);
+                            db.run("UPDATE goods_detail set cnt=?,sku=?,main_gallery=?,detail_gallery=?,time=?,goods_name=?,mall_id=? where goods_id =?",
+                                [page.sales,JSON.stringify(page.sku),page.hd_thumb_url,page.hd_thumb_url,date,page.goods_id,page.goods_name,page.mall_id],
                                 (err) => {
                                     if(err) {
+										// console.log(err);
                                         reject(err);
                                     } else {
                                         resolve();

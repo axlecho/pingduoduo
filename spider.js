@@ -88,8 +88,7 @@ function pullGoodsDetail() {
     getGoodsByFilter()
         .then(
             (result) => {getGoodDetail(result);},
-            (err) => {console.log(err);})
-            ;
+            (err) => {console.log(err);});
 }
 
 function getGoodDetail(goodsList) {
