@@ -174,7 +174,7 @@ function getGoodDetail(goodsList) {
                     return pdb.savePage(page);},
                 (err) => {
                     console.log(err.message);
-                    setTimeout(()=>{callback();},DELAY);
+                    // setTimeout(()=>{callback();},DELAY);
                     
                 }
             ).then(

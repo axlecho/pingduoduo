@@ -170,6 +170,7 @@ class PddDatabase {
                     (err) => {
                         if(err) {
 							console.log('update ==>  ' + page.goods_id);
+                            console.log(page);
                             db.run('UPDATE goods_detail set cnt=?,sku=?,main_gallery=?,detail_gallery=?,goods_name=?,rank=?,mall_id=? where goods_id =? and time=?',
                                 [page.sales,
 									JSON.stringify(page.sku),
@@ -179,10 +180,10 @@ class PddDatabase {
 									page.rank,
 									page.mall_id,
 									page.goods_id,
-									page.date],
+									date],
                                 (err) => {
                                     if(err) {
-										// console.log(err);
+										console.log(err);
                                         reject(err);
                                     } else {
                                         resolve();
