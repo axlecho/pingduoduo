@@ -138,7 +138,7 @@ function getGoodDetail(goodsList) {
                     console.log(item.rank);
                     return pdb.savePage(page);},
                 (err) => {
-                    console.log(err);
+                    console.log(err.message);
                     setTimeout(()=>{callback();},DELAY);
                     
                 }
@@ -148,10 +148,7 @@ function getGoodDetail(goodsList) {
                     console.log(err);
                     setTimeout(()=>{callback();},DELAY);
                 }
-            ).catch((err) => {
-                console.log(err);
-                setTimeout(()=>{callback();},DELAY);
-            });
+            )
         });            
     });
     return promise;    

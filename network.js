@@ -32,7 +32,7 @@ var opt = {
     gzip: true,
     json: true,
     headers: HEADER,
-    proxy:'http://127.0.0.1:1080'
+    // proxy:'http://127.0.0.1:1080'
 }
 
 function test(url) {
