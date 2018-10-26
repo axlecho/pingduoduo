@@ -136,7 +136,7 @@ class PddDatabase {
                     cnt = item.cnt;  
                 }               
                 db.serialize(function() {
-                    db.run('INSERT INTO goods(goods_id,goods_name,cnt,mall_id) VALUES (?,?,?);', [item.goods_id,item.goods_name,cnt,mall_id], 
+                    db.run('INSERT INTO goods(goods_id,goods_name,cnt,mall_id) VALUES (?,?,?,?);', [item.goods_id,item.goods_name,cnt,mall_id], 
                     (err) => {
                         if(err) {
                             db.run('UPDATE goods set goods_name=?,mall_id=?,cnt=? where goods_id =?',[item.goods_name,mall_id,cnt,item.goods_id],
@@ -189,7 +189,7 @@ class PddDatabase {
                                     }
                                 });
                         } else {
-                            reject(err);
+                            resolve();
                         }
                     });
             });            

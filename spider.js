@@ -6,49 +6,18 @@ var pdb = new PddDatabase();
 const DELAY = 4000;
 
 
-function test() {
-        pdb.getMalls()
-            .then(
-                (mallInfo) => {return getMallsInfo(mallInfo);},
-                (err) => {console.log(err);}
-            ).then(
-                () => {return pullGoodsDetail();},
-                (err) => {console.log(err);}
-            );
+function start() {
+	pdb.getMalls()
+		.then(
+			(mallInfo) => {return pullAllMallsInfo(mallInfo);},
+			(err) => {console.log(err);}
+		).then(
+			() => {return pullGoodsDetail();},
+			(err) => {console.log(err);}
+		);
 }
 
-function pullMallsInfo(mall_id) {
-   var promise = new Promise(function(resolve, reject) {
-        network.getMallInfo(mall_id)
-            .then((repos) => {
-                pdb.updateMallInfo(repos)
-                    .then(() => {setTimeout(()=>{resolve()},DELAY);},
-                        (err) => {throw err;});
-            })
-            .catch((err) => {
-                console.log(err);
-                setTimeout(()=>{reject(err)},DELAY);
-            });
-    });
-    return promise;
-}
-
-function pullMallsGoodsInfo(mall_id) {
-   var promise = new Promise(function(resolve, reject) {
-        network.getMallGoodsInfo(mall_id)
-            .then((repos) => {
-                console.log(repos.goods_list.length);
-                pdb.addGoods(repos.goods_list,mall_id);
-                setTimeout(()=>{resolve()},DELAY);
-            })
-            .catch((err) => {
-                setTimeout(()=>{reject(err)},DELAY);
-            });
-    });
-    return promise;    
-}
-
-function getMallsInfo(row) {
+function pullAllMallsInfo(row) {
     var promise = new Promise(function(resolve, reject) {
         async.eachSeries(row, (item, callback) => { 
             // console.log(item);
@@ -57,22 +26,21 @@ function getMallsInfo(row) {
             } else {
                 console.log(String('============> ' + item.mall_id).red);
             }
+			
             pullMallsInfo(item.mall_id)
-            .then(
-                () => {
-                    pullMallsGoodsInfo(item.mall_id).then(
-                        () => {callback()},
-                        (err) => {
-                            console.log(err);
-                            callback();
-                        }
-                    );
-                },
-                (err) => {
-                    console.log(err);
-                    callback()
-                }
-            );
+				.then(
+					() => { return pullMallsGoodsInfo(item.mall_id)},
+					(err) => {
+						console.log(err);
+						setTimeout(()=>{callback()},DELAY);
+					}
+				).then(
+					() => {callback()},
+					(err) => {
+						console.log(err);
+						setTimeout(()=>{callback()},DELAY);
+					}
+				);
         }, err => {
             if(err){
                 reject(err);
@@ -84,20 +52,64 @@ function getMallsInfo(row) {
     return promise;  
 }
 
+function pullMallsInfo(mall_id) {
+   var promise = new Promise(function(resolve, reject) {
+        network.getMallInfo(mall_id)
+            .then(
+				(repos) => {return pdb.updateMallInfo(repos)},
+				(err) => {reject(err)}
+			)
+			.then(
+				() => {resolve()},
+                (err) => {reject(err)}
+			)
+    });
+    return promise;
+}
+
+function pullMallsGoodsInfo(mall_id) {
+   var promise = new Promise(function(resolve, reject) {
+        network.getMallGoodsInfo(mall_id)
+            .then(
+				(repos) => {
+					console.log(repos.goods_list.length);
+					return pdb.addGoods(repos.goods_list,mall_id);			
+				},
+				(err) => {console.log(err)}
+			)
+			.then(
+				() => {setTimeout(()=>{resolve()},DELAY)},
+				(err) => { console.log(err)}
+			)
+            .catch((err) => {
+                setTimeout(()=>{reject(err)},DELAY);
+            });
+    });
+    return promise;    
+}
+
+
+
 function pullGoodsDetail() {
-    getFilter()
-        .then(
-			(result) => {return pullGoodsRank(result)},
-			(err) => {console.log(err)}
-        )
-        .then(
-            (result) => {return getGoodsByFilter(result)},
-            (err) => {console.log(err)}
-        )    
-        .then(
-            (result) => {getGoodDetail(result)},
-            (err) => {console.log(err)}
-        );
+	var promise = new Promise(function(resolve, reject) {
+		pdb.getFilter()
+			.then(
+				(result) => {return pullGoodsRank(result)},
+				(err) => {reject(err)}
+			)
+			.then(
+				(result) => {return getGoodsByFilter(result)},
+				(err) => {reject(err)}
+			)    
+			.then(
+				(result) => {return getGoodDetail(result)},
+				(err) => {reject(err)}
+			).then(
+				() => {resolve()},
+				(err) => {reject(err)}
+			);
+	});
+	return  promise;
 }
 
 function pullGoodsRank(filters) {
@@ -128,36 +140,6 @@ function pullGoodsRank(filters) {
     return promise; 
 }
 
-function getGoodDetail(goodsList) {
-    var promise = new Promise(function(resolve, reject) {
-        async.eachSeries(goodsList, (item, callback) => {
-            network.getGoodsInfo(item.goods_id)
-            .then(
-                (page) => {
-                    page.rank = item.rank;
-                    console.log(item.rank);
-                    return pdb.savePage(page);},
-                (err) => {
-                    console.log(err.message);
-                    setTimeout(()=>{callback();},DELAY);
-                    
-                }
-            ).then(
-                () => {setTimeout(()=>{callback();},DELAY);},
-                (err) => {
-                    console.log(err);
-                    setTimeout(()=>{callback();},DELAY);
-                }
-            )
-        });            
-    });
-    return promise;    
-}
-
-function getFilter() {
-    return pdb.getFilter();
-}
-
 function getGoodsByFilter(filters) {
     var promise = new Promise(function(resolve, reject) {
         var goodsByFilter = [];  
@@ -180,8 +162,37 @@ function getGoodsByFilter(filters) {
     });
     return promise;
 }
-    
-    
-// test();
 
-pullGoodsDetail();
+function getGoodDetail(goodsList) {
+    var promise = new Promise(function(resolve, reject) {
+        async.eachSeries(goodsList, (item, callback) => {
+            network.getGoodsInfo(item.goods_id)
+            .then(
+                (page) => {
+                    page.rank = item.rank;
+                    console.log(item.rank);
+                    return pdb.savePage(page);},
+                (err) => {
+                    console.log(err.message);
+                    setTimeout(()=>{callback();},DELAY);
+                    
+                }
+            ).then(
+                () => {setTimeout(()=>{callback()},DELAY);},
+                (err) => {
+                    console.log(err);
+                    setTimeout(()=>{callback()},DELAY);
+                }
+            )
+        },(err) => {
+			if(err) {
+				reject(err);
+			} else {
+				resolve(err);
+			}
+		});            
+    });
+    return promise;    
+}
+
+start();
