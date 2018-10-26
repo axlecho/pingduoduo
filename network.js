@@ -12,7 +12,7 @@ const MALL_GOODSINFO_PATH = '/api/turing/mall/query_cat_goods?';
 const MALL_INFO_PATH = '/mall/';
 const MAX_GOODS = 300;
 const MAX_PAGE = 10;
-const DELAY = 4000;
+const DELAY = 5000;
 
 
 
@@ -28,11 +28,11 @@ var HEADER = {
         }
         
 var opt = {
-    timeout: 360000,
+    timeout: 60000,
     gzip: true,
     json: true,
     headers: HEADER,
-    // proxy:'http://127.0.0.1:1080'
+    proxy:'http://127.0.0.1:1080'
 }
 
 function test(url) {

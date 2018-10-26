@@ -135,6 +135,7 @@ function getGoodDetail(goodsList) {
             .then(
                 (page) => {
                     page.rank = item.rank;
+                    console.log(item.rank);
                     return pdb.savePage(page);},
                 (err) => {
                     console.log(err);
@@ -147,7 +148,10 @@ function getGoodDetail(goodsList) {
                     console.log(err);
                     setTimeout(()=>{callback();},DELAY);
                 }
-            );
+            ).catch((err) => {
+                console.log(err);
+                setTimeout(()=>{callback();},DELAY);
+            });
         });            
     });
     return promise;    
@@ -166,7 +170,7 @@ function getGoodsByFilter(filters) {
                     filters.forEach((filter,index) => {
                         if((item.goods_name.lastIndexOf(filter.keyword) != -1)
                                 && (item.goods_name.lastIndexOf(filter.filter) != -1)){
-                            item.rank = filter.goods_list.indexOf(item.goodid);
+                            item.rank = filter.goods_list.indexOf(item.goods_id);
                             console.log(item.rank);
                             goodsByFilter.push(item);
                         }
