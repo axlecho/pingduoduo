@@ -110,12 +110,12 @@ function pullGoodsRank(filters) {
                         goods_list.push(repos.items[i].goods_id);
                     }
                     filter.goods_list = goods_list;
-                    console.log(filter.goods_list);
-                    callback();
+                    // console.log(filter.goods_list);
+                    setTimeout(()=>{callback();},DELAY);
                 })
                 .catch(function (err) {
                     console.log(err);
-                    callback();
+                    setTimeout(()=>{callback();},DELAY);
                 });
         }, (err) => {
             if(err) {
