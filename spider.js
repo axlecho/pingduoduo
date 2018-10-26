@@ -87,8 +87,8 @@ function getMallsInfo(row) {
 function pullGoodsDetail() {
     getFilter()
         .then(
-            (result) => {return pullGoodsRank(result)},
-            (err) => {console.log(err)}
+			(result) => {return pullGoodsRank(result)},
+			(err) => {console.log(err)}
         )
         .then(
             (result) => {return getGoodsByFilter(result)},
@@ -167,8 +167,8 @@ function getGoodsByFilter(filters) {
                     filters.forEach((filter,index) => {
                         if((item.goods_name.lastIndexOf(filter.keyword) != -1)
                                 && (item.goods_name.lastIndexOf(filter.filter) != -1)){
-                            item.rank = filter.goods_list.indexOf(item.goods_id);
-                            console.log(item.rank);
+							item.rank = filter.goods_list.indexOf(item.goods_id);
+                            // console.log(item.rank);
                             goodsByFilter.push(item);
                         }
                     });
