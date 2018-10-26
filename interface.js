@@ -11,7 +11,7 @@ function matchFilter(item,filter) {
 
 function getGoodsInfoDaily() {
     var date = new Date(new Date(new Date().toLocaleDateString()).getTime());
-    pdb.getGoodsDetailByDate(date)
+    pdb.getAllGoodsDetail()
         .then(
             (result) => {prinfByFilter(result)},
             (err) => {console.log(err)}
@@ -19,15 +19,27 @@ function getGoodsInfoDaily() {
 }
 
 function prinfByFilter(result) {
+    var today = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
+    var yesterday = today - 24 * 60 * 60 * 1000;
     pdb.getFilter()
         .then(
             (filters) => {
                 filters.forEach((filter) => {
                     console.log('==============> ' + filter.keyword + ' - ' + filter.filter);
-                    var set = [];
+                    var set = {};
                     result.forEach((item) => {
                         if(matchFilter(item,filter)) {
-                            set.push(item);
+                            // console.log(item.time + ' ' + today + ' ' + yesterday);
+                            if(set[item.goods_id]) {
+                                // console.log(set[item.goods_id]);
+                                // console.log(item);
+                                if(set[item.goods_id].time == today && item.time == yesterday) {
+                                    set[item.goods_id].one_day_sales = set[item.goods_id].cnt - item.cnt;
+                                }
+                            } else {
+                                set[item.goods_id] = item;
+                                set[item.goods_id].one_day_sales = -1; 
+                            }
                         }
                     });
                     prinfSet(set); 
@@ -38,12 +50,13 @@ function prinfByFilter(result) {
 }
 
 function prinfSet(set) {
-    set.sort(function(a,b){return b.cnt - a.cnt});
-    set.forEach((item) => {
+    var array = Object.values(set);
+    array.sort(function(a,b){return b.one_day_sales - a.one_day_sales});
+    array.forEach((item) => {
         if(item.mall_id == 8363337) {
-           console.log(String(item.cnt + '\t' + item.mall_name + '\t' + item.goods_name).red);
+           console.log(String(item.one_day_sales + '\t' + item.cnt + '\t' + item.mall_name + '\t' + item.goods_name).red);
         } else {
-           console.log(String(item.cnt + '\t' + item.mall_name + '\t' + item.goods_name));
+           console.log(String(item.one_day_sales + '\t' + item.cnt + '\t' + item.mall_name + '\t' + item.goods_name));
         }
         console.log('http://mobile.yangkeduo.com/goods.html?goods_id=' + item.goods_id); 
         

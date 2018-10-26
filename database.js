@@ -91,7 +91,7 @@ class PddDatabase {
     }
 
     getAllGoodsDetail() {
-        return getGoodsDetail('');
+        return this.getGoodsDetail('order by time desc');
 	}
 
     

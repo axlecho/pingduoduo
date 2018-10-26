@@ -105,7 +105,12 @@ function pullGoodsRank(filters) {
         async.eachSeries(filters, (filter, callback) => { 
              network.getAllSearchResult(filter.keyword,null)	
                 .then(function (repos) {
-                    filter.goods_list = repos.items;
+                    var goods_list = [];
+                    for( var i = 0;i < repos.items.length;i++){
+                        goods_list.push(repos.items[i].goods_id);
+                    }
+                    filter.goods_list = goods_list;
+                    console.log(filter.goods_list);
                     callback();
                 })
                 .catch(function (err) {
@@ -162,6 +167,7 @@ function getGoodsByFilter(filters) {
                         if((item.goods_name.lastIndexOf(filter.keyword) != -1)
                                 && (item.goods_name.lastIndexOf(filter.filter) != -1)){
                             item.rank = filter.goods_list.indexOf(item.goodid);
+                            console.log(item.rank);
                             goodsByFilter.push(item);
                         }
                     });
