@@ -169,7 +169,9 @@ class PddDatabase {
                     [page.goods_id,page.sales,JSON.stringify(page.sku),page.hd_thumb_url,page.hd_thumb_url,date,page.goods_name,page.rank,page.mall_id], 
                     (err) => {
                         if(err) {
-                            // console.log(err);
+                            if(page.rank != -1) {
+                                console.log(page);
+                            }
                             db.run('UPDATE goods_detail set cnt=?,sku=?,main_gallery=?,detail_gallery=?,time=?,goods_name=?,rank=?,mall_id=? where goods_id =?',
                                 [page.sales,JSON.stringify(page.sku),page.hd_thumb_url,page.hd_thumb_url,date,page.goods_id,page.goods_name,page.rank,page.mall_id],
                                 (err) => {

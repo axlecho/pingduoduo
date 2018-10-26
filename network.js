@@ -103,7 +103,8 @@ function getAllSearchResult(word,filter) {
                             whileCb("end");
                         } else {
                             // for anti spider
-                            setTimeout(()=> {whileCb()}, DELAY);
+                            whileCb();
+                            // setTimeout(()=> {whileCb()}, DELAY);
                         }
                     })
                     .catch(function (err) {
