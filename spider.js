@@ -171,19 +171,15 @@ function getGoodDetail(goodsList) {
                 (page) => {
                     page.rank = item.rank;
                     console.log(item.rank);
-                    return pdb.savePage(page);},
-                (err) => {
-                    console.log(err.message);
-                    // setTimeout(()=>{callback();},DELAY);
-                    
+                    return pdb.savePage(page);
                 }
             ).then(
-                () => {setTimeout(()=>{callback()},DELAY);},
+                () => {setTimeout(()=>{callback()},DELAY);}
+            ).catch (
                 (err) => {
                     console.log(err);
                     setTimeout(()=>{callback()},DELAY);
-                }
-            )
+                });
         },(err) => {
 			if(err) {
 				reject(err);
