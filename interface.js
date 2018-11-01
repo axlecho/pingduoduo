@@ -13,14 +13,14 @@ function getGoodsInfoDaily() {
     var date = new Date(new Date(new Date().toLocaleDateString()).getTime());
     pdb.getAllGoodsDetail()
         .then(
-            (result) => {prinfByFilter(result)},
+            (result) => {prinfByMall(result)},
             (err) => {console.log(err)}
         );
 }
 
 function prinfByFilter(result) {
     var today = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
-    var yesterday = today - 24 * 60 * 60 * 1000;
+    var yesterday = today - 3 * 24 * 60 * 60 * 1000;
     pdb.getFilter()
         .then(
             (filters) => {
@@ -46,9 +46,40 @@ function prinfByFilter(result) {
                 });
             },
             (err) => {reject(err)}
-        )    
+        )
 }
 
+function prinfByMall(result) {
+    var today = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
+    var yesterday = today - 3 * 24 * 60 * 60 * 1000;
+    pdb.getMalls()
+        .then(
+            (malls) => {
+                malls.forEach((mall) => {
+                    console.log('==============> ' + mall.mall_name);
+                    var set = {};
+                    result.forEach((item) => {
+                        if(item.mall_id == mall.mall_id) {
+                            if(set[item.goods_id]) {
+                                // console.log(set[item.goods_id]);
+                                // console.log(item);
+                                if(set[item.goods_id].time == today && item.time == yesterday) {
+                                    set[item.goods_id].one_day_sales = set[item.goods_id].cnt - item.cnt;
+                                }
+                            } else {
+                                set[item.goods_id] = item;
+                                set[item.goods_id].one_day_sales = -1; 
+                            }
+                        }
+                    });
+                    var array = Object.values(set);
+                    array.sort(function(a,b){return b.cnt - a.cnt});
+                    prinfSet(array.slice(0,10));
+                });
+            },
+            (err) => {console.log(err)}
+        );            
+}
 function prinfSet(set) {
     var array = Object.values(set);
     array.sort(function(a,b){return b.cnt - a.cnt});

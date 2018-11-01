@@ -142,7 +142,7 @@ function pullGoodsRank(filters) {
 
 function getGoodsByFilter(filters) {
     var promise = new Promise(function(resolve, reject) {
-        var goodsByFilter = [];  
+        // var goodsByFilter = [];  
         pdb.getGoods()
             .then((result) => {
                 result.forEach((item,index) => {
@@ -151,11 +151,11 @@ function getGoodsByFilter(filters) {
                                 && (item.goods_name.lastIndexOf(filter.filter) != -1)){
 							item.rank = filter.goods_list.indexOf(item.goods_id);
                             // console.log(item.rank);
-                            goodsByFilter.push(item);
-                        }
+                            //goodsByFilter.push(item);
+                        }  
                     });
                 });
-                resolve(goodsByFilter);
+                resolve(result);
             },
             (err) => {reject(err);});;
 
@@ -170,15 +170,15 @@ function getGoodDetail(goodsList) {
             .then(
                 (page) => {
                     page.rank = item.rank;
-                    console.log(item.rank);
+                    // console.log(item.rank);
                     return pdb.savePage(page);
                 }
             ).then(
-                () => {setTimeout(()=>{callback()},DELAY);}
+                () => {setTimeout(()=>{callback()},DELAY - 2000);}
             ).catch (
                 (err) => {
                     console.log(err);
-                    setTimeout(()=>{callback()},DELAY);
+                    setTimeout(()=>{callback()},DELAY - 2000);
                 });
         },(err) => {
 			if(err) {
