@@ -17,6 +17,10 @@ function start() {
 		);
 }
 
+function test() {
+	getMallsInfoBySearch();
+}	
+
 function pullAllMallsInfo(row) {
     var promise = new Promise(function(resolve, reject) {
         async.eachSeries(row, (item, callback) => { 
@@ -191,4 +195,54 @@ function getGoodDetail(goodsList) {
     return promise;    
 }
 
-start();
+function getMallsInfoBySearch() {
+	var promise = new Promise(function(resolve, reject) {
+		network.getAllSearchResult('乐拼',null)
+			.then(
+				(repo) => {
+					// console.log(repo);
+					return getMallInfoByGood(repo.items)
+				},
+				(err) => {reject(err)}
+			)
+			.then(
+				() => {console.log('done')},
+				(err) => {console.log(err)}
+			);
+	});
+	return promise;
+}
+
+function getMallInfoByGood(repo) {
+    var promise = new Promise(function(resolve, reject) {
+        async.eachSeries(repo, (item, callback) => {
+			// console.log(item.goods_id);
+            network.getGoodsInfo(item.goods_id)
+            .then(
+                (page) => {return page.mall_id}
+            ).then(
+                (mall_id) => {return network.getMallInfo(mall_id)}
+            ).then(
+				(repo) => {
+					console.log(repo.mall_id + ' ' + repo.mall_name + ' ' + repo.goods_num);
+					setTimeout(()=>{callback()},DELAY - 2000)
+				}
+			).catch (
+                (err) => {
+                    console.log(err.message);
+                    setTimeout(()=>{callback()},DELAY - 2000);
+                }
+			);
+        },(err) => {
+			if(err) {
+				reject(err);
+			} else {
+				resolve();
+			}
+		});            
+    });
+    return promise;  
+}
+	
+
+test();

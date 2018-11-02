@@ -69,6 +69,7 @@ function goodsRanksInner(goods_id,keyword,filter) {
         network.getAllSearchResult(keyword,filter)	
             .then(function (repos) {
                 for(var i=0,length=repos.items.length;i<length;i++){
+					console.log(repos.items[i]);
                     if(goods_id === repos.items[i].goods_id) {
                         repos.rank = i;
                         resolve(repos);
