@@ -21,6 +21,8 @@ function test() {
 	getMallsInfoBySearch();
 }	
 
+
+
 function pullAllMallsInfo(row) {
     var promise = new Promise(function(resolve, reject) {
         async.eachSeries(row, (item, callback) => { 
@@ -35,14 +37,14 @@ function pullAllMallsInfo(row) {
 				.then(
 					() => { return pullMallsGoodsInfo(item.mall_id)},
 					(err) => {
-						console.log(err);
-						setTimeout(()=>{callback()},DELAY);
+						console.log(err.message);
+						callback();
 					}
 				).then(
 					() => {callback()},
 					(err) => {
-						console.log(err);
-						setTimeout(()=>{callback()},DELAY);
+						console.log(err.message);
+						callback();
 					}
 				);
         }, err => {
@@ -60,13 +62,14 @@ function pullMallsInfo(mall_id) {
    var promise = new Promise(function(resolve, reject) {
         network.getMallInfo(mall_id)
             .then(
-				(repos) => {return pdb.updateMallInfo(repos)},
-				(err) => {reject(err)}
+				(repos) => {return pdb.updateMallInfo(repos)}
 			)
 			.then(
-				() => {resolve()},
-                (err) => {reject(err)}
+				() => {resolve()}
 			)
+            .catch((err) => {
+                setTimeout(()=>{reject(err)},DELAY);
+            });
     });
     return promise;
 }
@@ -78,12 +81,10 @@ function pullMallsGoodsInfo(mall_id) {
 				(repos) => {
 					console.log(repos.goods_list.length);
 					return pdb.addGoods(repos.goods_list,mall_id);			
-				},
-				(err) => {console.log(err)}
+				}
 			)
 			.then(
-				() => {setTimeout(()=>{resolve()},DELAY)},
-				(err) => { console.log(err)}
+				() => {setTimeout(()=>{resolve()},DELAY)}
 			)
             .catch((err) => {
                 setTimeout(()=>{reject(err)},DELAY);
@@ -91,7 +92,6 @@ function pullMallsGoodsInfo(mall_id) {
     });
     return promise;    
 }
-
 
 
 function pullGoodsDetail() {
@@ -195,6 +195,8 @@ function getGoodDetail(goodsList) {
     return promise;    
 }
 
+
+
 function getMallsInfoBySearch() {
 	var promise = new Promise(function(resolve, reject) {
 		network.getAllSearchResult('乐拼',null)
@@ -245,4 +247,4 @@ function getMallInfoByGood(repo) {
 }
 	
 
-test();
+start();
