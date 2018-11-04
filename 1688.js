@@ -1,7 +1,10 @@
 const rp = require('request-promise');
 const cheerio = require('cheerio');
 const iconv = require('iconv-lite');
+const async = require("async");
 
+
+const total = 54;
 
 var HEADER = {
 	'accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
@@ -16,24 +19,52 @@ var opt = {
     timeout: 60000,
 	gzip:true,
     headers: HEADER,
+    encoding: null
 }
-
-
-
-		
 		
 function getSearchResult(page) {
-	opt.uri = 'https://xingfantoys.1688.com/page/offerlist.htm?pageNum='  + page;
-    return rp(opt);
+    var promise = new Promise(function(resolve, reject) {
+        opt.uri = 'https://xingfantoys.1688.com/page/offerlist.htm?pageNum='  + page;
+        // console.log(opt.uri);
+        rp(opt)
+            .then(
+                (repo) => {
+                    var body = iconv.decode(repo,'gbk').toString();
+                    var $ = cheerio.load(body);
+                    $('li.offer-list-row-offer').each((i,e) => {
+                        var price = $(e).find('.price-container').attr('data-highprice');
+                        var title = $(e).find('.title-link').attr('title');
+                        var cnt = $(e).find('.booked-counts').text();
+                        console.log(price + '***' + title + '***' + cnt);
+                    });
+                    resolve();
+                },
+                (err) => {reject(err.message)}
+            );
+    });
+    return promise;
 }
 
+var i = 1;
+async.whilst(
+    () => {return i <= total},
+    (cb) => {
+        getSearchResult(i)
+            .then(
+                () => {setTimeout(()=>{cb()},500)},
+                (err) => {
+                    console.log(err);
+                    cb();
+                }
+            )
+        i ++;
+    },
+    (err) => {console.log(err)}
+)
 
-getSearchResult(1)
-	.then(
-		(repo) => {
-			repo = iconv.decode(repo,'gbk');
-			// var $ = cheerio.load(body);
-			console.log(repo)
-		},
-		(err) => {console.log(err.message)}
-	);
+
+
+
+
+
+
