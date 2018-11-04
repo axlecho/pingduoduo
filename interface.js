@@ -73,7 +73,8 @@ function prinfByMall(result) {
                         }
                     });
                     var array = Object.values(set);
-                    array.sort(function(a,b){return b.one_day_sales - a.one_day_sales});
+					array.sort(function(a,b){return b.cnt - a.cnt});
+                    // array.sort(function(a,b){return b.one_day_sales - a.one_day_sales});
                     prinfSet(array.slice(0,10));
                 });
             },
