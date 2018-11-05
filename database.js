@@ -259,7 +259,7 @@ function getAllSrcGoods() {
 function updateSrc(src_item) {
     var promise = new Promise(function(resolve, reject) { 
         db.serialize(function() {
-            db.run('UPDATE goods_src set total_sale=?,onday_sale=?,mall_on_sale=? where id =?',
+            db.run('UPDATE goods_src set total_sale=?,oneday_sale=?,mall_on_sale=? where id =?',
                 [src_item.total_sale,src_item.oneday_sale,src_item.mall_on_sale,src_item.id],
                 (err) => {
                     if(err) {
@@ -272,20 +272,68 @@ function updateSrc(src_item) {
     })
 }
 
-function calculateTotalSale(src_item) {
+function calculate(src_item) {
+    
+    var sgood_id = src_item.goods_id.replace(/^[A-Z]+|[A-Z]+$/g,'');
+    var sbrand = src_item.brand.replace(/^[A-Z]+|[A-Z]+$/g,'');
+    console.log('===========>  ' + sgood_id + '\t' + sbrand); 
     var promise = new Promise(function(resolve, reject) { 
         db.serialize(function() {
-            db.run('UPDATE goods_src set total_sale=?,onday_sale=?,mall_on_sale=? where id =?',
-                [src_item.total_sale,src_item.oneday_sale,src_item.mall_on_sale,src_item.id],
-                (err) => {
+            db.all("select * from goods_detail where goods_name like '%" + sgood_id + "%'",
+                (err,row) => {
+                    // console.log(err);
                     if(err) {
                         reject(err);
-                    } else {
-                        resolve();
+                        return;
                     }
+                    
+                    console.log('item total  ' + row.length);
+                    var mall_set = {};
+                    var goods_set = {};
+                    
+                    for(var i = 0;i < row.length;i ++) {
+                        if(row[i].goods_name.lastIndexOf(sbrand) != -1) {
+                            if(row[i].time == currentime) {
+                                console.log(row[i].goods_name);
+                                src_item.total_sale += row[i].cnt;
+                                if(mall_set[row[i].mall_id] === undefined) {
+                                    src_item.mall_on_sale ++;
+                                    mall_set[row[i].mall_id] = true;
+                                }
+                            }
+                            
+                            if(goods_set[row[i].goods_id] === undefined) {
+                                goods_set[row[i].goods_id] = [];
+                            }
+                            goods_set[row[i].goods_id].push(row[i]);
+                        }
+                    }
+                    
+                    var yesterday = currentime - 24 * 60 * 60 * 1000;
+                    for(var index in goods_set) {
+                        var today_goods;
+                        var yesterday_goods;
+                        for(var i = 0;i < goods_set[index].length;i ++) {
+                            if(goods_set[index][i].time = currentime) {
+                                today_goods = goods_set[index][i];
+                            }
+                            
+                            if(goods_set[index][i].time = yesterday) {
+                                yesterday_goods = goods_set[index][i];
+                            }
+                        }
+                        
+                        if(today_goods && yesterday_goods) {
+                            src_item.oneday_sale += today_goods.cnt - yesterday_goods.cnt;
+                        }  
+                    }
+                    
+                    console.log(src_item.goods_id + '\t' + src_item.total_sale + '\t' + src_item.mall_on_sale + '\t' + src_item.oneday_sale);
+                    resolve();
                 });                    
         });
-    })
+    });
+    return promise;
 }
 
 
@@ -300,19 +348,27 @@ getCurrentTime()
     )
     .then(
         (row) => {
-            async.eachSeries(row, (src_item, callback) => {
+            async.eachSeries(row, (src_item, callback) => { 
                 src_item.total_sale = 0;
                 src_item.oneday_sale = 0;
                 src_item.mall_on_sale = 0;
-                
-                
+                // callback();
+                calculate(src_item)
+                    .then(
+                        () => {return updateSrc(src_item)}
+                    ).then(
+                        () => {callback()}
+                    ).catch (
+                        (err) => { 
+                            console(err);
+                            callback();
+                        }
+                    )
+                        
             });          
         },
         (err) => {console.log(err)}
     )
-    
-    
-    
 /*
 
 */
