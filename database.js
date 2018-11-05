@@ -223,7 +223,101 @@ pddDatabase.getTarget()
     },(err) => {
         console.log(err);
     });
- */   
+ */
+ 
+ 
+function getCurrentTime() {
+    var promise = new Promise(function(resolve, reject) {  
+        db.all('select distinct(time) from goods_detail order by time desc limit 1',
+            (err,row) => {
+                if(null != err) {
+                    reject(err);
+                    return;
+                }
+                
+                resolve(row);
+            });
+        });
+    return promise;    
+}
+
+function getAllSrcGoods() {
+    var promise = new Promise(function(resolve, reject) {  
+        db.all('select * from goods_src',
+            (err,row) => {
+                if(null != err) {
+                    reject(err);
+                    return;
+                }
+                
+                resolve(row);
+            });
+        });
+    return promise;  
+}
+
+function updateSrc(src_item) {
+    var promise = new Promise(function(resolve, reject) { 
+        db.serialize(function() {
+            db.run('UPDATE goods_src set total_sale=?,onday_sale=?,mall_on_sale=? where id =?',
+                [src_item.total_sale,src_item.oneday_sale,src_item.mall_on_sale,src_item.id],
+                (err) => {
+                    if(err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });                    
+        });
+    })
+}
+
+function calculateTotalSale(src_item) {
+    var promise = new Promise(function(resolve, reject) { 
+        db.serialize(function() {
+            db.run('UPDATE goods_src set total_sale=?,onday_sale=?,mall_on_sale=? where id =?',
+                [src_item.total_sale,src_item.oneday_sale,src_item.mall_on_sale,src_item.id],
+                (err) => {
+                    if(err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });                    
+        });
+    })
+}
+
+
+var currentime = -1;
+getCurrentTime()
+    .then(
+        (result) => {
+            currentime = result[0].time;
+            return getAllSrcGoods();
+        },
+        (err) => {console.log(err)}
+    )
+    .then(
+        (row) => {
+            async.eachSeries(row, (src_item, callback) => {
+                src_item.total_sale = 0;
+                src_item.oneday_sale = 0;
+                src_item.mall_on_sale = 0;
+                
+                
+            });          
+        },
+        (err) => {console.log(err)}
+    )
+    
+    
+    
+/*
+
+*/
+
+
 module.exports = PddDatabase;
 
 
