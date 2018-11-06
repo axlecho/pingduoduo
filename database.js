@@ -314,21 +314,22 @@ function calculate(src_item) {
                         var today_goods;
                         var yesterday_goods;
                         for(var i = 0;i < goods_set[index].length;i ++) {
-                            if(goods_set[index][i].time = currentime) {
+                            if(goods_set[index][i].time === currentime) {
                                 today_goods = goods_set[index][i];
                             }
                             
-                            if(goods_set[index][i].time = yesterday) {
+                            if(goods_set[index][i].time === yesterday) {
                                 yesterday_goods = goods_set[index][i];
                             }
                         }
-                        
+                        // console.log(today_goods.time + '\t' + yesterday_goods.time);
+                        // console.log(today_goods.cnt + '\t' + yesterday_goods.cnt);
                         if(today_goods && yesterday_goods) {
                             src_item.oneday_sale += today_goods.cnt - yesterday_goods.cnt;
                         }  
                     }
                     
-                    console.log(src_item.goods_id + '\t' + src_item.total_sale + '\t' + src_item.mall_on_sale + '\t' + src_item.oneday_sale);
+                    
                     resolve();
                 });                    
         });
