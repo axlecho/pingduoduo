@@ -52,11 +52,13 @@ function prinfByFilter(result) {
 function prinfByMall(result) {
     var today = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
     var yesterday = today - 24 * 60 * 60 * 1000;
+    var threeday = today - 3 * 24 * 60 * 60 * 1000;
+    
     pdb.getMalls()
         .then(
             (malls) => {
                 malls.forEach((mall) => {
-                    console.log('==============> ' + mall.mall_name);
+                    // console.log('==============> ' + mall.mall_name);
                     var set = {};
                     result.forEach((item) => {
                         if(item.mall_id == mall.mall_id) {
@@ -66,9 +68,14 @@ function prinfByMall(result) {
                                 if(set[item.goods_id].time == today && item.time == yesterday) {
                                     set[item.goods_id].one_day_sales = set[item.goods_id].cnt - item.cnt;
                                 }
+                                
+                                if(set[item.goods_id].time == today && item.time == threeday) {
+                                    set[item.goods_id].three_day_sales = set[item.goods_id].cnt - item.cnt;
+                                }
                             } else {
                                 set[item.goods_id] = item;
                                 set[item.goods_id].one_day_sales = -1; 
+                                set[item.goods_id].three_day_sales = -1;
                             }
                         }
                     });
@@ -83,17 +90,17 @@ function prinfByMall(result) {
 }
 function prinfSet(set) {
     var array = Object.values(set);
-    array.sort(function(a,b){return b.one_day_sales - a.one_day_sales});
+    array.sort(function(a,b){return b.three_day_sales - a.three_day_sales});
     array.forEach((item) => {
-        if(item.mall_id == 8363337) {
-           console.log(String(item.rank + '\t' + item.one_day_sales + '\t' + item.cnt + '\t' + item.mall_name + '\t' + item.goods_name).red);
-        } else {
-           console.log(String(item.rank + '\t' + item.one_day_sales + '\t' + item.cnt + '\t' + item.mall_name + '\t' + item.goods_name));
-        }
-        console.log('http://mobile.yangkeduo.com/goods.html?goods_id=' + item.goods_id); 
+        // if(item.mall_id == 8363337) {
+        //   console.log(String(item.rank + '\t' + item.one_day_sales + '\t' + item.three_day_sales + '\t' + item.cnt + '\t' + item.mall_name + '\t' + item.goods_name).red);
+        //} else {
+        process.stdout.write(String(item.rank + '\t' + item.one_day_sales + '\t' + item.three_day_sales + '\t' + item.cnt + '\t' + item.mall_name + '\t' + item.goods_name));
+        //}
+        console.log('\thttp://mobile.yangkeduo.com/goods.html?goods_id=' + item.goods_id); 
         
     });
-    console.log('\n');
+    // console.log('\n');
 }
 
 function getShopSalesDaily() {

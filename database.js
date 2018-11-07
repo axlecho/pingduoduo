@@ -337,41 +337,42 @@ function calculate(src_item) {
     return promise;
 }
 
-
-var currentime = -1;
-getCurrentTime()
-    .then(
-        (result) => {
-            currentime = result[0].time;
-            return getAllSrcGoods();
-        },
-        (err) => {console.log(err)}
-    )
-    .then(
-        (row) => {
-            async.eachSeries(row, (src_item, callback) => { 
-                src_item.total_sale = 0;
-                src_item.oneday_sale = 0;
-                src_item.mall_on_sale = 0;
-                // callback();
-                calculate(src_item)
-                    .then(
-                        () => {return updateSrc(src_item)}
-                    ).then(
-                        () => {callback()}
-                    ).catch (
-                        (err) => { 
-                            console(err);
-                            callback();
-                        }
-                    )
-                        
-            });          
-        },
-        (err) => {console.log(err)}
-    )
+function updateGoods_src() {
+    var currentime = -1;
+    getCurrentTime()
+        .then(
+            (result) => {
+                currentime = result[0].time;
+                return getAllSrcGoods();
+            },
+            (err) => {console.log(err)}
+        )
+        .then(
+            (row) => {
+                async.eachSeries(row, (src_item, callback) => { 
+                    src_item.total_sale = 0;
+                    src_item.oneday_sale = 0;
+                    src_item.mall_on_sale = 0;
+                    // callback();
+                    calculate(src_item)
+                        .then(
+                            () => {return updateSrc(src_item)}
+                        ).then(
+                            () => {callback()}
+                        ).catch (
+                            (err) => { 
+                                console(err);
+                                callback();
+                            }
+                        )
+                            
+                });          
+            },
+            (err) => {console.log(err)}
+        )
+}
 /*
-
+    updateGoods_src();
 */
 
 
