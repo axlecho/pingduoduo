@@ -225,7 +225,7 @@ pddDatabase.getTarget()
     });
  */
  
- 
+var currentime = -1;
 function getCurrentTime() {
     var promise = new Promise(function(resolve, reject) {  
         db.all('select distinct(time) from goods_detail order by time desc limit 1',
@@ -273,7 +273,6 @@ function updateSrc(src_item) {
 }
 
 function calculate(src_item) {
-    
     var sgood_id = src_item.goods_id.replace(/^[A-Z]+|[A-Z]+$/g,'');
     var sbrand = src_item.brand.replace(/^[A-Z]+|[A-Z]+$/g,'');
     console.log('===========>  ' + sgood_id + '\t' + sbrand); 
@@ -338,7 +337,7 @@ function calculate(src_item) {
 }
 
 function updateGoods_src() {
-    var currentime = -1;
+    
     getCurrentTime()
         .then(
             (result) => {
@@ -371,9 +370,9 @@ function updateGoods_src() {
             (err) => {console.log(err)}
         )
 }
-/*
+
     updateGoods_src();
-*/
+
 
 
 module.exports = PddDatabase;
