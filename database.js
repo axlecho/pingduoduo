@@ -259,8 +259,8 @@ function getAllSrcGoods() {
 function updateSrc(src_item) {
     var promise = new Promise(function(resolve, reject) { 
         db.serialize(function() {
-            db.run('UPDATE goods_src set total_sale=?,oneday_sale=?,mall_on_sale=? where id =?',
-                [src_item.total_sale,src_item.oneday_sale,src_item.mall_on_sale,src_item.id],
+            db.run('UPDATE goods_src set total_sale=?,oneday_sale=?,threeday_sale=?,mall_on_sale=? where id =?',
+                [src_item.total_sale,src_item.oneday_sale,src_item.threeday_sale,src_item.mall_on_sale,src_item.id],
                 (err) => {
                     if(err) {
                         reject(err);
@@ -309,9 +309,13 @@ function calculate(src_item) {
                     }
                     
                     var yesterday = currentime - 24 * 60 * 60 * 1000;
+                    var threeday = currentime - 3 * 24 * 60 * 60 * 1000;
+                    
                     for(var index in goods_set) {
                         var today_goods;
                         var yesterday_goods;
+                        var threeday_goods;
+                        
                         for(var i = 0;i < goods_set[index].length;i ++) {
                             if(goods_set[index][i].time === currentime) {
                                 today_goods = goods_set[index][i];
@@ -320,12 +324,20 @@ function calculate(src_item) {
                             if(goods_set[index][i].time === yesterday) {
                                 yesterday_goods = goods_set[index][i];
                             }
+                            
+                            if(goods_set[index][i].time === threeday) {
+                                threeday_goods = goods_set[index][i];
+                            }
                         }
                         // console.log(today_goods.time + '\t' + yesterday_goods.time);
                         // console.log(today_goods.cnt + '\t' + yesterday_goods.cnt);
                         if(today_goods && yesterday_goods) {
                             src_item.oneday_sale += today_goods.cnt - yesterday_goods.cnt;
-                        }  
+                        }
+                        
+                        if(today_goods && threeday_goods) {
+                            src_item.threeday_sale += today_goods.cnt - threeday_goods.cnt;
+                        }
                     }
                     
                     
