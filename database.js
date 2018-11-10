@@ -383,9 +383,9 @@ function updateGoods_src() {
         )
 }
 
+/*
     updateGoods_src();
-
-
+*/
 
 module.exports = PddDatabase;
 
